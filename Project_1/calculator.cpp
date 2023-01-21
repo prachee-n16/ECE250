@@ -40,7 +40,6 @@ public:
     };
     double get_value()
     {
-        std::cout << val << std::endl;
         return val;
     };
     Node *get_next_node()
@@ -87,6 +86,8 @@ public:
         current_size = 0;
         head = NULL;
         tail = NULL;
+
+        std::cout << "success" << std::endl;
     }
 
     // Destructor
@@ -103,14 +104,22 @@ public:
         {
             head = new Node(x, val);
             tail = head;
+            std::cout << "success" << std::endl;
         }
         else
         {
-            // If head is not empty, add it to end of linked list
-            Node *temp = new Node(x, val);
-            temp->set_next_node(head);
-            head = temp;
-            print_linked_list();
+            if (find_node(x) == NULL)
+            {
+                // If head is not empty, add it to end of linked list
+                Node *temp = new Node(x, val);
+                temp->set_next_node(head);
+                head = temp;
+                std::cout << "success" << std::endl;
+            }
+            else
+            {
+                std::cout << "failure" << std::endl;
+            }
         }
     };
 
@@ -118,7 +127,7 @@ public:
     void print_linked_list()
     {
         Node *temp = head;
-        while (temp->get_next_node() != NULL)
+        while (temp != NULL)
         {
             temp->get_value();
             temp = temp->get_next_node();
@@ -129,10 +138,32 @@ public:
     void remove_node(std::string x);
 
     // To be called for other function purposes
-    void find_node(std::string x);
+    Node *find_node(std::string x)
+    {
+        Node *temp = head;
+        while (temp != NULL)
+        {
+            if (temp->get_name() == x)
+            {
+                return temp;
+            }
+            temp = temp->get_next_node();
+        }
+
+        return NULL;
+    };
 
     // To be called for input command PRT
-    void print_node_value(std::string x);
+    void print_node_value(std::string x)
+    {
+        Node *temp = find_node(x);
+        if (temp != NULL)
+        {
+            std::cout << temp->get_value() << std::endl;
+        } else {
+            std::cout << "Variable" << x << " was not found." << std::endl;
+        }
+    };
 
     // To be called for input command Add
     void add_nodes(std::string x, std::string y, std::string z);
@@ -198,9 +229,11 @@ int main()
         {
             std::string name;
 
-            std::cout << command << name << std::endl;
+            std::cin >> name;
+
+            calculator->print_node_value(name);
         }
-        else if (command == "EXT")
+        else if (command == "END")
         {
             break;
         }
