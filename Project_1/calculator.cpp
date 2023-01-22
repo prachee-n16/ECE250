@@ -74,8 +74,6 @@ private:
     // FIXME: KILL MEMORY IN DESTRUCTOR
     // Stores the head of the linked list
     Node *head;
-    // Stores the tail of the linked list
-    Node *tail;
 
 public:
     // Constructor
@@ -85,7 +83,6 @@ public:
         max_size = n;
         current_size = 0;
         head = NULL;
-        tail = NULL;
 
         std::cout << "success" << std::endl;
     }
@@ -100,21 +97,22 @@ public:
     void insert_node(std::string x, double val)
     {
         // If head is empty, add this to linked list
-        if (head == NULL)
+        if (head == NULL && current_size != max_size)
         {
             head = new Node(x, val);
-            tail = head;
             std::cout << "success" << std::endl;
+            current_size += 1;
         }
         else
         {
-            if (find_node(x) == NULL)
+            if (find_node(x) == NULL && current_size != max_size)
             {
                 // If head is not empty, add it to end of linked list
                 Node *temp = new Node(x, val);
                 temp->set_next_node(head);
                 head = temp;
                 std::cout << "success" << std::endl;
+                current_size += 1;
             }
             else
             {
@@ -129,13 +127,40 @@ public:
         Node *temp = head;
         while (temp != NULL)
         {
-            temp->get_value();
+            std::cout << temp->get_value();
             temp = temp->get_next_node();
         }
     }
 
     // To be called for input command REM
-    void remove_node(std::string x);
+    void remove_node(std::string x)
+    {
+        // Node before removed node;
+        Node *prev_r = head;
+        Node *temp = head;
+
+        current_size -= 1;
+
+        while (temp != NULL)
+        {
+            if (temp->get_name() == x)
+            {
+                break;
+            }
+            prev_r = temp;
+            temp = temp->get_next_node();
+        }
+
+        if (temp != NULL)
+        {
+            prev_r->set_next_node(temp->get_next_node());
+            std::cout << "success" << std::endl;
+        }
+        else
+        {
+            std::cout << "failure" << std::endl;
+        };
+    };
 
     // To be called for other function purposes
     Node *find_node(std::string x)
@@ -160,16 +185,100 @@ public:
         if (temp != NULL)
         {
             std::cout << temp->get_value() << std::endl;
-        } else {
-            std::cout << "Variable" << x << " was not found." << std::endl;
+        }
+        else
+        {
+            std::cout << "Variable " << x << " was not found." << std::endl;
         }
     };
 
     // To be called for input command Add
-    void add_nodes(std::string x, std::string y, std::string z);
+    void add_nodes(std::string x, std::string y, std::string z)
+    {
+        if (head == NULL) {
+            std::cout << "failure" << std::endl;
+        }
+        // Stores the values that need to be added and keep sum
+        double x1, y1;
+        int variables_found = 0;
+
+        Node *temp = head;
+        Node *z1 = head;
+
+        while (temp != NULL)
+        {
+            if (temp->get_name() == x)
+            {
+                variables_found += 1;
+                x1 = temp->get_value();
+            }
+            else if (temp->get_name() == y)
+            {
+                variables_found += 1;
+                y1 = temp->get_value();
+            }
+            else if (temp->get_name() == z)
+            {
+                variables_found += 1;
+                z1 = temp;
+            }
+            temp = temp->get_next_node();
+        }
+
+        if (variables_found != 3)
+        {
+            z1->set_value(x1 + y1);
+            std::cout << "success" << std::endl;
+        }
+        else
+        {
+            std::cout << "failure" << std::endl;
+        }
+    };
 
     // To be called for input command SUB
-    void sub_nodes(std::string x, std::string y, std::string z);
+    void sub_nodes(std::string x, std::string y, std::string z)
+    {
+        if (head == NULL) {
+            std::cout << "failure" << std::endl;
+        }
+
+        // Stores the values that need to be added and keep sum
+        double x1, y1;
+        Node *z1;
+        int variables_found = 0;
+
+        Node *temp = head;
+        while (temp != NULL)
+        {
+            if (temp->get_name() == x)
+            {
+                variables_found += 1;
+                x1 = temp->get_value();
+            }
+            else if (temp->get_name() == y)
+            {
+                variables_found += 1;
+                y1 = temp->get_value();
+            }
+            else if (temp->get_name() == z)
+            {
+                variables_found += 1;
+                z1 = temp;
+            }
+            temp = temp->get_next_node();
+        }
+
+        if (variables_found != 3)
+        {
+            z1->set_value(x1 - y1);
+            std::cout << "success" << std::endl;
+        }
+        else
+        {
+            std::cout << "failure" << std::endl;
+        }
+    };
 
 public:
 };
@@ -201,29 +310,31 @@ int main()
         }
         else if (command == "ADD")
         {
-            int x, y, z;
+            std::string x, y, z;
 
             std::cin >> x;
             std::cin >> y;
             std::cin >> z;
 
-            std::cout << command << x << y << z << std::endl;
+            calculator->add_nodes(x, y, z);
         }
         else if (command == "SUB")
         {
-            int x, y, z;
+            std::string x, y, z;
 
             std::cin >> x;
             std::cin >> y;
             std::cin >> z;
 
-            std::cout << command << x << y << z << std::endl;
+            calculator->sub_nodes(x, y, z);
         }
         else if (command == "REM")
         {
             std::string name;
 
-            std::cout << command << name << std::endl;
+            std::cin >> name;
+
+            calculator->remove_node(name);
         }
         else if (command == "PRT")
         {
@@ -235,6 +346,7 @@ int main()
         }
         else if (command == "END")
         {
+            calculator->print_linked_list();
             break;
         }
     }
