@@ -6,6 +6,7 @@
 #include "calculator.hpp"
 
 // Class for calculator-based linked list
+
 // Constructor
 Calculator::Calculator(int n)
 {
@@ -18,22 +19,7 @@ Calculator::Calculator(int n)
 };
 
 // Destructor
-Calculator::~Calculator()
-{
-    Node *temp = head;
-
-    while (head != NULL)
-    {
-        while (head->get_next_node() != NULL)
-        {
-            temp = head->get_next_node();
-            head = temp;
-        }
-    }
-
-    delete temp;
-    temp = nullptr;
-};
+Calculator::~Calculator(){};
 
 // TODO: Find better function names (not a fan of these ones)
 // To be called for input command DEF
@@ -54,12 +40,8 @@ void Calculator::insert_node(std::string x, double val)
             Node *temp = new Node(x, val);
             temp->set_next_node(head);
             head = temp;
-            current_size += 1;
-
             std::cout << "success" << std::endl;
-
-            temp = nullptr;
-            delete temp;
+            current_size += 1;
         }
         else
         {
@@ -75,15 +57,6 @@ void Calculator::remove_node(std::string x)
     Node *prev_r = head;
     Node *temp = head;
 
-    if (current_size == 1)
-    {
-        head = NULL;
-        std::cout << "success" << std::endl;
-        return;
-    };
-
-    current_size -= 1;
-
     while (temp != NULL)
     {
         if (temp->get_name() == x)
@@ -93,31 +66,22 @@ void Calculator::remove_node(std::string x)
         prev_r = temp;
         temp = temp->get_next_node();
     }
-<<<<<<< HEAD
-    if (current_size == 1)
-    {
+    if (current_size == 1) {
         head = NULL;
         current_size -= 1;
         std::cout << "success" << std::endl;
         return;
     }
-=======
-
->>>>>>> parent of 7806bae (Fix remove function)
     if (temp != NULL)
     {
         prev_r->set_next_node(temp->get_next_node());
+        current_size -= 1;
         std::cout << "success" << std::endl;
     }
     else
     {
         std::cout << "failure" << std::endl;
     };
-
-    prev_r = nullptr;
-    temp = nullptr;
-    delete prev_r;
-    delete temp;
 };
 
 // To be called for other function purposes
@@ -128,15 +92,11 @@ Node *Calculator::find_node(std::string x)
     {
         if (temp->get_name() == x)
         {
-            temp = nullptr;
-            delete temp;
             return temp;
         }
         temp = temp->get_next_node();
     }
 
-    temp = nullptr;
-    delete temp;
     return NULL;
 };
 
@@ -152,8 +112,6 @@ void Calculator::print_node_value(std::string x)
     {
         std::cout << "Variable " << x << " was not found." << std::endl;
     }
-    temp = nullptr;
-    delete temp;
 };
 
 // To be called for input command Add
@@ -199,11 +157,6 @@ void Calculator::add_nodes(std::string x, std::string y, std::string z)
     {
         std::cout << "failure" << std::endl;
     }
-
-    temp = nullptr;
-    z1 = nullptr;
-    delete temp;
-    delete z1;
 };
 
 // To be called for input command SUB
@@ -249,9 +202,4 @@ void Calculator::sub_nodes(std::string x, std::string y, std::string z)
     {
         std::cout << "failure" << std::endl;
     }
-
-    temp = nullptr;
-    z1 = nullptr;
-    delete temp;
-    delete z1;
 };
