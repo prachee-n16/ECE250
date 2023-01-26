@@ -110,7 +110,7 @@ void Calculator::print_node_value(std::string x)
     }
     else
     {
-        std::cout << "Variable " << x << " was not found." << std::endl;
+        std::cout << "variable " << x << " was not found." << std::endl;
     }
 };
 
