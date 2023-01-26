@@ -19,9 +19,7 @@ Calculator::Calculator(int n)
 };
 
 // Destructor
-Calculator::~Calculator()
-{
-};
+Calculator::~Calculator(){};
 
 // TODO: Find better function names (not a fan of these ones)
 // To be called for input command DEF
@@ -69,6 +67,13 @@ void Calculator::remove_node(std::string x)
     // Node before removed node;
     Node *prev_r = head;
     Node *temp = head;
+
+    if (current_size == 1)
+    {
+        head = NULL;
+        std::cout << "success" << std::endl;
+        return;
+    };
 
     current_size -= 1;
 
@@ -144,12 +149,12 @@ void Calculator::add_nodes(std::string x, std::string y, std::string z)
             variables_found += 1;
             x1 = temp->get_value();
         }
-        else if (temp->get_name() == y)
+        if (temp->get_name() == y)
         {
             variables_found += 1;
             y1 = temp->get_value();
         }
-        else if (temp->get_name() == z)
+        if (temp->get_name() == z)
         {
             variables_found += 1;
             z1 = temp;
@@ -157,7 +162,7 @@ void Calculator::add_nodes(std::string x, std::string y, std::string z)
         temp = temp->get_next_node();
     }
 
-    if (variables_found != 3)
+    if (variables_found == 3)
     {
         z1->set_value(x1 + y1);
         std::cout << "success" << std::endl;
@@ -202,7 +207,7 @@ void Calculator::sub_nodes(std::string x, std::string y, std::string z)
         temp = temp->get_next_node();
     }
 
-    if (variables_found != 3)
+    if (variables_found == 3)
     {
         z1->set_value(x1 - y1);
         std::cout << "success" << std::endl;
