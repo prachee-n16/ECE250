@@ -75,6 +75,15 @@ void Calculator::remove_node(std::string x)
     Node *prev_r = head;
     Node *temp = head;
 
+    if (current_size == 1)
+    {
+        head = NULL;
+        std::cout << "success" << std::endl;
+        return;
+    };
+
+    current_size -= 1;
+
     while (temp != NULL)
     {
         if (temp->get_name() == x)
@@ -84,6 +93,7 @@ void Calculator::remove_node(std::string x)
         prev_r = temp;
         temp = temp->get_next_node();
     }
+<<<<<<< HEAD
     if (current_size == 1)
     {
         head = NULL;
@@ -91,10 +101,12 @@ void Calculator::remove_node(std::string x)
         std::cout << "success" << std::endl;
         return;
     }
+=======
+
+>>>>>>> parent of 7806bae (Fix remove function)
     if (temp != NULL)
     {
         prev_r->set_next_node(temp->get_next_node());
-        current_size -= 1;
         std::cout << "success" << std::endl;
     }
     else
