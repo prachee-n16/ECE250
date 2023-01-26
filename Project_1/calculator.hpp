@@ -31,9 +31,6 @@ public:
     // To be called for input command DEF
     void insert_node(std::string x, double val);
 
-    // For testing purposes
-    void print_linked_list();
-
     // To be called for input command REM
     void remove_node(std::string x);
 

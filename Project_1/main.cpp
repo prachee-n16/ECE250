@@ -70,7 +70,6 @@ int main()
         }
         else if (command == "END")
         {
-            calculator->print_linked_list();
             break;
         }
     }
