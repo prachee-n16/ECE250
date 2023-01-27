@@ -40,9 +40,6 @@ public:
     // To be called for input command PRT
     void print_node_value(std::string x);
 
-    // To be called for input command Add
-    void add_nodes(std::string x, std::string y, std::string z);
-
-    // To be called for input command SUB
-    void sub_nodes(std::string x, std::string y, std::string z);
+    // To be called for input command Add/Sub
+    void arithmetic_op_nodes(std::string x, std::string y, std::string z, std::string operation);
 };

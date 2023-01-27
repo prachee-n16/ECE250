@@ -40,7 +40,7 @@ int main()
             std::cin >> y;
             std::cin >> z;
 
-            calculator->add_nodes(x, y, z);
+            calculator->arithmetic_op_nodes(x, y, z, "ADD");
         }
         else if (command == "SUB")
         {
@@ -50,7 +50,7 @@ int main()
             std::cin >> y;
             std::cin >> z;
 
-            calculator->sub_nodes(x, y, z);
+            calculator->arithmetic_op_nodes(x, y, z, "SUB");
         }
         else if (command == "REM")
         {
