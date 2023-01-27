@@ -25,14 +25,10 @@ Calculator::~Calculator()
 
     while (head != NULL)
     {
-        while (head->get_next_node() != NULL)
-        {
-            temp = head->get_next_node();
-            head = temp;
-        }
+        temp = head->get_next_node();
+        delete head;
+        head = temp;
     }
-    delete temp;
-    temp = nullptr;
 };
 
 // TODO: Find better function names (not a fan of these ones)
@@ -51,9 +47,10 @@ void Calculator::insert_node(std::string x, double val)
         if (find_node(x) == NULL && current_size != max_size)
         {
             // If head is not empty, add it to end of linked list
-            Node *temp = new Node(x, val);
-            temp->set_next_node(head);
-            head = temp;
+            Node *temp = head;
+            head = new Node(x, val);
+            head->set_next_node(temp);
+            
             std::cout << "success" << std::endl;
             current_size += 1;
         }
@@ -81,14 +78,18 @@ void Calculator::remove_node(std::string x)
     {
         if (current_size == 1)
         {
+            delete head;
             head = NULL;
+
             current_size -= 1;
             std::cout << "success" << std::endl;
             return;
         }
         else
         {
+            Node* temp = head;
             head = head->get_next_node();
+            delete temp;
         }
         current_size -= 1;
         std::cout << "success" << std::endl;
@@ -108,6 +109,7 @@ void Calculator::remove_node(std::string x)
     if (temp != NULL)
     {
         prev_r->set_next_node(temp->get_next_node());
+        delete temp;
         current_size -= 1;
         std::cout << "success" << std::endl;
     }

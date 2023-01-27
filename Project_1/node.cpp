@@ -20,8 +20,6 @@ Node::Node(std::string s, double n)
 }
 
 Node::~Node() {
-    delete next;
-    next = nullptr;
 }
 
 // Setter and getter functions for each variable

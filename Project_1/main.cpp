@@ -73,4 +73,6 @@ int main()
             break;
         }
     }
+
+    delete calculator;
 }
