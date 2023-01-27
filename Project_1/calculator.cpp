@@ -19,7 +19,21 @@ Calculator::Calculator(int n)
 };
 
 // Destructor
-Calculator::~Calculator(){};
+Calculator::~Calculator()
+{
+    Node *temp = head;
+
+    while (head != NULL)
+    {
+        while (head->get_next_node() != NULL)
+        {
+            temp = head->get_next_node();
+            head = temp;
+        }
+    }
+    delete temp;
+    temp = nullptr;
+};
 
 // TODO: Find better function names (not a fan of these ones)
 // To be called for input command DEF
@@ -57,6 +71,30 @@ void Calculator::remove_node(std::string x)
     Node *prev_r = head;
     Node *temp = head;
 
+    if (head == NULL)
+    {
+        std::cout << "failure" << std::endl;
+        return;
+    }
+    // If the first element is to be removed
+    if (temp->get_name() == x)
+    {
+        if (current_size == 1)
+        {
+            head = NULL;
+            current_size -= 1;
+            std::cout << "success" << std::endl;
+            return;
+        }
+        else
+        {
+            head = head->get_next_node();
+        }
+        current_size -= 1;
+        std::cout << "success" << std::endl;
+        return;
+    }
+
     while (temp != NULL)
     {
         if (temp->get_name() == x)
@@ -66,18 +104,14 @@ void Calculator::remove_node(std::string x)
         prev_r = temp;
         temp = temp->get_next_node();
     }
-    if (current_size == 1) {
-        head = NULL;
-        current_size -= 1;
-        std::cout << "success" << std::endl;
-        return;
-    }
+
     if (temp != NULL)
     {
         prev_r->set_next_node(temp->get_next_node());
         current_size -= 1;
         std::cout << "success" << std::endl;
     }
+
     else
     {
         std::cout << "failure" << std::endl;
@@ -110,7 +144,7 @@ void Calculator::print_node_value(std::string x)
     }
     else
     {
-        std::cout << "variable " << x << " was not found." << std::endl;
+        std::cout << "variable " << x << " not found" << std::endl;
     }
 };
 
@@ -180,12 +214,12 @@ void Calculator::sub_nodes(std::string x, std::string y, std::string z)
             variables_found += 1;
             x1 = temp->get_value();
         }
-        else if (temp->get_name() == y)
+        if (temp->get_name() == y)
         {
             variables_found += 1;
             y1 = temp->get_value();
         }
-        else if (temp->get_name() == z)
+        if (temp->get_name() == z)
         {
             variables_found += 1;
             z1 = temp;
