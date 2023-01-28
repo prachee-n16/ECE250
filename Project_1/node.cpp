@@ -4,19 +4,12 @@
 
 #include "node.hpp"
 
-Node::Node()
-{
-    val = 0;
-    name = "";
-    next = NULL;
-}
-
 // Parametrised Constructor
 Node::Node(std::string s, double n)
 {
     name = s;
     val = n;
-    next = NULL;
+    p_next = nullptr;
 }
 
 Node::~Node() {
@@ -35,7 +28,7 @@ double Node::get_value()
 };
 Node *Node::get_next_node()
 {
-    return next;
+    return p_next;
 };
 
 // Setter functions for each variable
@@ -49,5 +42,5 @@ void Node::set_value(double num)
 };
 void Node::set_next_node(Node *next_node)
 {
-    next = next_node;
+    p_next = next_node;
 };

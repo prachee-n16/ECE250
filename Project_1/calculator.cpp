@@ -13,7 +13,7 @@ Calculator::Calculator(int n)
     // Size of linked list
     max_size = n;
     current_size = 0;
-    head = NULL;
+    head = nullptr;
 
     std::cout << "success" << std::endl;
 };
@@ -23,7 +23,7 @@ Calculator::~Calculator()
 {
     Node *temp = head;
 
-    while (head != NULL)
+    while (head != nullptr)
     {
         temp = head->get_next_node();
         delete head;
@@ -36,7 +36,7 @@ void Calculator::insert_node(std::string x, double val)
 {
     // If head is empty, add this to linked list
     // Make sure size isn't exceeded
-    if (head == NULL && current_size != max_size)
+    if (head == nullptr && current_size != max_size)
     {
         head = new Node(x, val);
         current_size += 1;
@@ -47,7 +47,7 @@ void Calculator::insert_node(std::string x, double val)
     {
         // If node is not already added,
         // and max size hasn't been reached
-        if (find_node(x) == NULL && current_size != max_size)
+        if (find_node(x) == nullptr && current_size != max_size)
         {
             Node *temp = head;
             head = new Node(x, val);
@@ -71,7 +71,7 @@ void Calculator::remove_node(std::string x)
     Node *prev_r = head;
     Node *temp = head;
 
-    if (head == NULL)
+    if (head == nullptr)
     {
         std::cout << "failure" << std::endl;
         return;
@@ -84,7 +84,7 @@ void Calculator::remove_node(std::string x)
         if (current_size == 1)
         {
             delete head;
-            head = NULL;
+            head = nullptr;
 
             current_size -= 1;
             std::cout << "success" << std::endl;
@@ -104,7 +104,7 @@ void Calculator::remove_node(std::string x)
 
     // If not first element,
     // Find node previous to it
-    while (temp != NULL)
+    while (temp != nullptr)
     {
         if (temp->get_name() == x)
         {
@@ -115,7 +115,7 @@ void Calculator::remove_node(std::string x)
     }
 
     // If the element is found, delete it
-    if (temp != NULL)
+    if (temp != nullptr)
     {
         prev_r->set_next_node(temp->get_next_node());
         delete temp;
@@ -134,7 +134,7 @@ void Calculator::remove_node(std::string x)
 Node *Calculator::find_node(std::string x)
 {
     Node *temp = head;
-    while (temp != NULL)
+    while (temp != nullptr)
     {
         if (temp->get_name() == x)
         {
@@ -143,14 +143,14 @@ Node *Calculator::find_node(std::string x)
         temp = temp->get_next_node();
     }
 
-    return NULL;
+    return nullptr;
 };
 
 // To be called for input command PRT
 void Calculator::print_node_value(std::string x)
 {
     Node *temp = find_node(x);
-    if (temp != NULL)
+    if (temp != nullptr)
     {
         std::cout << temp->get_value() << std::endl;
     }
@@ -163,7 +163,7 @@ void Calculator::print_node_value(std::string x)
 // To be called for input command Add
 void Calculator::arithmetic_op_nodes(std::string x, std::string y, std::string z, std::string operation)
 {
-    if (head == NULL)
+    if (head == nullptr)
     {
         std::cout << "failure" << std::endl;
     }
@@ -175,7 +175,7 @@ void Calculator::arithmetic_op_nodes(std::string x, std::string y, std::string z
     Node *z1 = head;
 
     // Finds all the variables we are looking for
-    while (temp != NULL)
+    while (temp != nullptr)
     {
         if (temp->get_name() == x)
         {

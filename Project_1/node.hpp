@@ -12,15 +12,11 @@ private:
     // Stores the name of Node
     std::string name;
     // Stores the next Node
-    Node *next;
+    Node *p_next;
 
 public:
-    // Default Constructor
-    Node();
     // Parameterized Constructor
     Node(std::string s, double n);
-    // Destructor
-    ~Node();
 
     // Setter and getter functions for each variable
     std::string get_name();
