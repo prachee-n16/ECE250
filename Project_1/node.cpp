@@ -12,9 +12,6 @@ Node::Node(std::string s, double n)
     p_next = nullptr;
 }
 
-Node::~Node() {
-}
-
 // Setter and getter functions for each variable
 
 // Getter functions for each variable
