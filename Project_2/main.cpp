@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+#include "OpenAddressedHT.hpp"
+
 int main();
 
 int main()
@@ -10,6 +12,10 @@ int main()
     std::string command;
 
     // Check to see if it's OPEN or ORDERED
+    //TODO: Currently operating under the assumption everything is open addressing
+
+    //OpenAddressed hash table instance
+    OpenAddressedHT *hashtable;
 
     while (std::cin >> command)
     {
@@ -18,16 +24,19 @@ int main()
             int memory_size;
             int page_size;
             std::cin >> memory_size >> page_size;
+            hashtable = new OpenAddressedHT(memory_size, page_size);
         }
         else if (command == "INSERT")
         {
             int PID;
             std::cin >> PID;
+            hashtable->insert_PID(PID);
         }
         else if (command == "SEARCH")
         {
             int PID;
             std::cin >> PID;
+            hashtable->search_PID(PID);
         }
         else if (command == "WRITE")
         {
@@ -35,26 +44,26 @@ int main()
             int ADDRESS;
             int value;
             std::cin >> PID >> ADDRESS >> value;
+            hashtable->write_PID(PID, ADDRESS, value);
         }
         else if (command == "READ")
         {
             int PID;
             int ADDRESS;
             std::cin >> PID >> ADDRESS;
+            hashtable->read_PID(PID, ADDRESS);
         }
         else if (command == "DELETE")
         {
             int PID;
             std::cin >> PID;
-        }
-        else if (command == "PRINT")
-        {
-            int m;
-            std::cin >> m;
+            hashtable->delete_PID(PID);
         }
         else if (command == "END")
         {
             break;
         }
     }
+
+    delete hashtable;
 }

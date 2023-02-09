@@ -1,10 +1,9 @@
 #include "process.hpp"
 
 // Constructor
-Process::Process(int id, int address)
+Process::Process()
 {
-    PID = id;
-    addr_physical = address;
+    isProcessCreated = false;
 }
 
 // Destructor
@@ -17,14 +16,37 @@ void Process::set_PID(int id)
 {
     PID = id;
 };
+
 void Process::set_addr_physical(int address)
 {
     addr_physical = address;
 };
 
-int Process::get_PID(){
+void Process::set_isProcessCreated(bool does_process_exist){
+    isProcessCreated = does_process_exist;
+};
+
+void Process::set_pageID(int id)
+{
+    pageID = id;
+};
+
+
+int Process::get_PID()
+{
     return PID;
 };
-int Process::get_addr_physical(){
+
+int Process::get_pageID()
+{
+    return pageID;
+};
+
+int Process::get_addr_physical()
+{
     return addr_physical;
 };
+
+bool Process::get_isProcessCreated() {
+    return isProcessCreated;
+}
