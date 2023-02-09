@@ -3,6 +3,7 @@
 #include <string>
 
 #include "OpenAddressedHT.hpp"
+#include "SeparateChaining.hpp"
 
 int main();
 

@@ -63,11 +63,11 @@ void OpenAddressedHT::insert_PID(int id)
 
     current_pages_used += 1;
     // DEBUG STATEMENT
-    std::cout
-        << "Is Process Created?: " << process[probe].get_isProcessCreated() << std::endl
-        << "PID: " << process[probe].get_PID() << std::endl
-        << "Physical Address: " << process[probe].get_addr_physical()
-        << std::endl;
+    // std::cout
+    //     << "Is Process Created?: " << process[probe].get_isProcessCreated() << std::endl
+    //     << "PID: " << process[probe].get_PID() << std::endl
+    //     << "Physical Address: " << process[probe].get_addr_physical()
+    //     << std::endl;
 
     std::cout << "success" << std::endl;
 };
@@ -81,7 +81,10 @@ void OpenAddressedHT::search_PID(int id)
     if (offset % 2 == 0)
         offset += 1;
 
-    while (process[probe].get_isProcessCreated() == true)
+    int loop_count = 0;
+    // If it has looped through all of hash table
+    // Exit while loop
+    while ((process[probe].get_isProcessCreated() == true) && (loop_count != HT_size))
     {
         if (process[probe].get_PID() == id)
         {
@@ -89,6 +92,7 @@ void OpenAddressedHT::search_PID(int id)
             return;
         };
         probe = (probe + offset) % HT_size;
+        loop_count += 1;
     };
 
     std::cout << "not found" << std::endl;
@@ -108,7 +112,8 @@ void OpenAddressedHT::write_PID(int id, int addr_virtual, int value)
     if (offset % 2 == 0)
         offset += 1;
 
-    while (process[probe].get_isProcessCreated() == true)
+    int loop_count = 0;
+    while ((process[probe].get_isProcessCreated() == true) && (loop_count != HT_size))
     {
         if (process[probe].get_PID() == id)
         {
@@ -117,6 +122,7 @@ void OpenAddressedHT::write_PID(int id, int addr_virtual, int value)
             std::cout << "success" << std::endl;
             return;
         };
+        loop_count += 1;
     };
 
     // Did not find PID
@@ -138,14 +144,16 @@ void OpenAddressedHT::read_PID(int id, int addr_virtual)
     if (offset % 2 == 0)
         offset += 1;
 
-    while (process[probe].get_isProcessCreated() == true)
+    int loop_count = 0;
+    while ((process[probe].get_isProcessCreated() == true) && (loop_count != HT_size))
     {
         if (process[probe].get_PID() == id)
         {
             int index = process[probe].get_addr_physical() + addr_virtual;
-            std::cout << memory[index] << std::endl;
+            std::cout << addr_virtual << " " << memory[index] << std::endl;
             return;
         };
+        loop_count += 1;
     };
 
     // Did not find PID
@@ -160,18 +168,24 @@ void OpenAddressedHT::delete_PID(int id)
     // If the offset is even, add 1
     if (offset % 2 == 0)
         offset += 1;
-    while (process[probe].get_isProcessCreated() == true)
+
+    int loop_count = 0;
+    while ((process[probe].get_isProcessCreated() == true) && (loop_count != HT_size))
     {
-        int index = process[probe].get_pageID();
-        pages_used[index] = 0;
-        current_pages_used -=1;
+        if (process[probe].get_PID() == id)
+        {
+            int index = process[probe].get_pageID();
+            pages_used[index] = 0;
+            current_pages_used -= 1;
 
-        process[probe].set_isProcessCreated(false);
-        process[probe].set_PID(0);
-        process[probe].set_addr_physical(0);
+            process[probe].set_isProcessCreated(false);
+            process[probe].set_PID(0);
+            process[probe].set_addr_physical(0);
 
-        std::cout << "success" << std::endl;
-        return;
+            std::cout << "success" << std::endl;
+            return;
+        };
+        loop_count += 1;
     };
 
     // Did not find PID
