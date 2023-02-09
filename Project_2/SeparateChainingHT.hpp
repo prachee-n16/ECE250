@@ -2,7 +2,7 @@
 
 #include "process.hpp"
 
-class SeparateChaining
+class SeparateChainingHT
 {
 private:
     // Memory array
@@ -26,8 +26,8 @@ private:
 
 public:
     // Constructor and Destructor
-    SeparateChaining(int memory_size, int page_size);
-    ~SeparateChaining();
+    SeparateChainingHT(int memory_size, int page_size);
+    ~SeparateChainingHT();
 
     // Insert PID and allocate memory
     void insert_PID(int id);
