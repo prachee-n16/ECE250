@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <algorithm>
 
 SeparateChainingHT::SeparateChainingHT(int memory_size, int page_size)
 {
@@ -12,14 +11,16 @@ SeparateChainingHT::SeparateChainingHT(int memory_size, int page_size)
     HT_size = memory_size / page_size;
 
     // Initialize memory array
-    memory = new int[memory_size];
+    memory = new int[memory_size]{};
     // Check what pages are used
-    pages_used = new int[page_size];
+    pages_used = new int[page_size]{};
     N = memory_size;
     P = page_size;
 
+    current_pages_used = 0;
+
     // Hashtable where each element is a vector of Process objects
-    process = new std::vector<Process>[HT_size];
+    process = new std::vector<Process>[HT_size]{};
 
     std::cout << "success" << std::endl;
 }
@@ -30,13 +31,14 @@ SeparateChainingHT::~SeparateChainingHT()
     {
         process[i].clear();
     }
-    delete[] process;
 
+    delete[] process;
     delete[] memory;
     delete[] pages_used;
 
     memory = nullptr;
     pages_used = nullptr;
+    process = nullptr;
 };
 
 // Insert PID and allocate memory
@@ -51,6 +53,8 @@ void SeparateChainingHT::insert_PID(unsigned int id)
 
     // Set probe using given hash function
     int probe = id % HT_size;
+    // Store where it should go into vector to be ordered
+    int index = -3;
     // Go through vector and ensure PID doesn't already exist
     for (int i = 0; i < process[probe].size(); i++)
     {
@@ -59,27 +63,54 @@ void SeparateChainingHT::insert_PID(unsigned int id)
             std::cout << "failure" << std::endl;
             return;
         }
+
+        // While index has not been set
+        if (index == -3)
+        {   
+            if (process[probe][i].get_PID() < id)
+            {
+                index = i;
+            }
+        }
     };
 
-    // CODE
-    // What I want to do is access the process at probe index
-    // Push back a new process object
-    // So let's make that process object
+    // When inserting PID, I am setting page ID always as probe.
+    // I need to add a check to see if there is space elsewhere in memory
     Process *proc = new Process;
     proc->set_isProcessCreated(true);
     proc->set_PID(id);
-    proc->set_pageID(probe);
-    proc->set_addr_physical(probe * P);
-    proc->set_pageID(probe);
-    pages_used[probe] = 1;
+
+    if (pages_used[probe] == 0)
+    {
+        proc->set_addr_physical(probe * P);
+        pages_used[probe] = 1;
+    }
+    else
+    {
+        // Find space in memory array for this process
+        for (int i = 0; i < HT_size; i++)
+        {
+            if (pages_used[i] == 0)
+            {
+                proc->set_addr_physical(i * P);
+                pages_used[i] = 1;
+                break;
+            }
+        }
+    }
 
     current_pages_used += 1;
+    // We never encountered a ID greater than what we have right now
+    if (index == -3)
+    {
+        process[probe].push_back(*proc);
+    } else {
+        process[probe].insert(process[probe].begin()+index, *proc);
+    }
 
-    process[probe].push_back(*proc);
     std::cout << "success" << std::endl;
 
     delete proc;
-    proc = nullptr;
 };
 
 // Search for key PID in Hash table
@@ -158,13 +189,14 @@ void SeparateChainingHT::delete_PID(unsigned int id)
 {
     // Set probe using given hash function
     int probe = id % HT_size;
-
+    
     for (int i = 0; i < process[probe].size(); i++)
     {
         if (process[probe][i].get_PID() == id)
         {
             pages_used[probe] = 0;
             current_pages_used -= 1;
+
             process[probe].erase(process[probe].begin() + i);
             std::cout << "success" << std::endl;
             return;
@@ -175,7 +207,7 @@ void SeparateChainingHT::delete_PID(unsigned int id)
     std::cout << "failure" << std::endl;
 };
 
-// Print  a key PID from hash table
+// Print a key PID from hash table
 void SeparateChainingHT::print_PID(int m)
 {
     if (process[m].size() == 0)
@@ -183,9 +215,6 @@ void SeparateChainingHT::print_PID(int m)
         std::cout << "chain is empty" << std::endl;
         return;
     }
-
-    std::sort(process[m].begin(), process[m].end(), [](Process &lhs, Process &rhs)
-              { return lhs.get_PID() > rhs.get_PID(); });
 
     // Set probe using given hash function
     for (int i = 0; i < process[m].size(); i++)

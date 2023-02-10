@@ -68,6 +68,7 @@ int main()
             }
         }
         delete hashtable;
+        hashtable = nullptr;
     }
 
     if (hash_type == "ORDERED")
@@ -127,5 +128,6 @@ int main()
             }
         }
         delete ordered_hashtable;
+        ordered_hashtable = nullptr;
     }
 }

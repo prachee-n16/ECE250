@@ -3,6 +3,8 @@
 // Constructor
 Process::Process()
 {
+    PID = 0;
+    addr_physical = 0;
     isProcessCreated = false;
 }
 
@@ -27,20 +29,11 @@ void Process::set_isProcessCreated(bool does_process_exist)
     isProcessCreated = does_process_exist;
 };
 
-void Process::set_pageID(int id)
-{
-    pageID = id;
-};
-
 unsigned int Process::get_PID()
 {
     return PID;
 };
 
-int Process::get_pageID()
-{
-    return pageID;
-};
 
 int Process::get_addr_physical()
 {

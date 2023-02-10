@@ -9,8 +9,6 @@ class Process {
         int addr_physical;
         //Boolean to check if PID is assigned or not
         bool isProcessCreated;
-        //Integer to store which page# process is assigned to
-        int pageID;
 
     public:
         //Constructor and Destructor
@@ -21,10 +19,8 @@ class Process {
         void set_PID(unsigned int id);
         void set_addr_physical(int address);
         void set_isProcessCreated(bool does_process_exist);
-        void set_pageID(int id);
 
         unsigned int get_PID();
         int get_addr_physical();
-        int get_pageID();
         bool get_isProcessCreated();
 };
