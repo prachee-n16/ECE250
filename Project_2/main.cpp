@@ -14,6 +14,8 @@ int main()
     // Stores and checks if it's OPEN or ORDERED
     std::string hash_type;
 
+    std::cin >> hash_type;
+    
     // OpenAddressed hash table instance
     if (hash_type == "OPEN")
     {
@@ -68,7 +70,6 @@ int main()
         }
         delete hashtable;
     }
-
     if (hash_type == "ORDERED")
     {
         SeparateChainingHT* ordered_hashtable;

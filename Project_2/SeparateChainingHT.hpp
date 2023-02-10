@@ -1,5 +1,9 @@
 #pragma once
 
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include "process.hpp"
 
 class SeparateChainingHT
@@ -9,7 +13,7 @@ private:
     int *memory;
 
     // Hash table of process id's
-    Process *process;
+    std::vector<Process> *process;
 
     // Maximum size of hash table
     int HT_size;

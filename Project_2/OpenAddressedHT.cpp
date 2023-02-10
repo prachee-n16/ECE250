@@ -34,6 +34,7 @@ void OpenAddressedHT::insert_PID(int id)
         std::cout << "failure" << std::endl;
         return;
     }
+
     // Set probe and offset using given hash functions
     int probe = id % HT_size;
     int offset = (id / HT_size) % HT_size;
@@ -50,18 +51,14 @@ void OpenAddressedHT::insert_PID(int id)
     // Set PID and physical address
     process[probe].set_isProcessCreated(true);
     process[probe].set_PID(id);
-    for (int i = 0; i < P; i++)
-    {
-        if (pages_used[i] == 0)
-        {
-            process[probe].set_addr_physical(i * P);
-            process[probe].set_pageID(i);
-            pages_used[i] = 1;
-            break;
-        }
-    }
+
+    // CHANGE THIS IT'S INCREASING KKFLADSJF TIME
+    process[probe].set_addr_physical(probe * P);
+    process[probe].set_pageID(probe);
+    pages_used[probe] = 1;
 
     current_pages_used += 1;
+
     // DEBUG STATEMENT
     // std::cout
     //     << "Is Process Created?: " << process[probe].get_isProcessCreated() << std::endl
