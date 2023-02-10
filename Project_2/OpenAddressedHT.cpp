@@ -22,13 +22,21 @@ OpenAddressedHT::OpenAddressedHT(int memory_size, int page_size)
 };
 
 // Destructor
-OpenAddressedHT::~OpenAddressedHT(){};
+OpenAddressedHT::~OpenAddressedHT(){
+    delete[] memory;
+    delete[] pages_used;
+    delete[] process;
+
+    memory = nullptr;
+    pages_used = nullptr;
+    process = nullptr;
+};
 
 // logic borrowed from ECE 250 Slides
 // Insert a PID (key into hash table) and allocate memory
-void OpenAddressedHT::insert_PID(int id)
+void OpenAddressedHT::insert_PID(unsigned int id)
 {
-    // TODO: Check if hash table is full
+    // TODO: If key exists already, print failure
     if (current_pages_used == N / P)
     {
         std::cout << "failure" << std::endl;
@@ -45,14 +53,16 @@ void OpenAddressedHT::insert_PID(int id)
     // While this index has not been accessed
     while (process[probe].get_isProcessCreated() == true)
     {
+        if (process[probe].get_PID() == id) {
+            std::cout << "failure" << std::endl;
+            return;
+        }
         probe = (probe + offset) % HT_size;
     };
 
     // Set PID and physical address
     process[probe].set_isProcessCreated(true);
     process[probe].set_PID(id);
-
-    // CHANGE THIS IT'S INCREASING KKFLADSJF TIME
     process[probe].set_addr_physical(probe * P);
     process[probe].set_pageID(probe);
     pages_used[probe] = 1;
@@ -69,7 +79,7 @@ void OpenAddressedHT::insert_PID(int id)
     std::cout << "success" << std::endl;
 };
 
-void OpenAddressedHT::search_PID(int id)
+void OpenAddressedHT::search_PID(unsigned int id)
 {
     // Set probe and offset using given hash functions
     int probe = id % HT_size;
@@ -95,12 +105,13 @@ void OpenAddressedHT::search_PID(int id)
     std::cout << "not found" << std::endl;
 };
 
-void OpenAddressedHT::write_PID(int id, int addr_virtual, int value)
+void OpenAddressedHT::write_PID(unsigned int id, int addr_virtual, int value)
 {
     // Checks if virtual address in space
     if (addr_virtual > P)
     {
         std::cout << "failure" << std::endl;
+        return;
     }
     // Set probe and offset using given hash functions
     int probe = id % HT_size;
@@ -110,7 +121,7 @@ void OpenAddressedHT::write_PID(int id, int addr_virtual, int value)
         offset += 1;
 
     int loop_count = 0;
-    while ((process[probe].get_isProcessCreated() == true) && (loop_count != HT_size))
+    while ((process[probe].get_isProcessCreated() == true) && (loop_count != HT_size + 1))
     {
         if (process[probe].get_PID() == id)
         {
@@ -119,6 +130,7 @@ void OpenAddressedHT::write_PID(int id, int addr_virtual, int value)
             std::cout << "success" << std::endl;
             return;
         };
+        probe = (probe + offset) % HT_size;
         loop_count += 1;
     };
 
@@ -126,12 +138,13 @@ void OpenAddressedHT::write_PID(int id, int addr_virtual, int value)
     std::cout << "failure" << std::endl;
 };
 
-void OpenAddressedHT::read_PID(int id, int addr_virtual)
+void OpenAddressedHT::read_PID(unsigned int id, int addr_virtual)
 {
     // Checks if virtual address in space
-    if (addr_virtual > P)
+    if (addr_virtual > P-1)
     {
         std::cout << "failure" << std::endl;
+        return;
     }
 
     // Set probe and offset using given hash functions
@@ -157,7 +170,7 @@ void OpenAddressedHT::read_PID(int id, int addr_virtual)
     std::cout << "failure" << std::endl;
 };
 
-void OpenAddressedHT::delete_PID(int id)
+void OpenAddressedHT::delete_PID(unsigned int id)
 {
     // Set probe and offset using given hash functions
     int probe = id % HT_size;

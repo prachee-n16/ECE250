@@ -21,8 +21,7 @@ int main()
     {
         OpenAddressedHT *hashtable;
 
-        while (std::cin >> command)
-        {
+        while (std::cin >> command){
             if (command == "M")
             {
                 int memory_size;
@@ -32,19 +31,19 @@ int main()
             }
             else if (command == "INSERT")
             {
-                int PID;
+                unsigned int PID;
                 std::cin >> PID;
                 hashtable->insert_PID(PID);
             }
             else if (command == "SEARCH")
             {
-                int PID;
+                unsigned int PID;
                 std::cin >> PID;
                 hashtable->search_PID(PID);
             }
             else if (command == "WRITE")
             {
-                int PID;
+                unsigned int  PID;
                 int ADDRESS;
                 int value;
                 std::cin >> PID >> ADDRESS >> value;
@@ -52,14 +51,14 @@ int main()
             }
             else if (command == "READ")
             {
-                int PID;
+                unsigned int  PID;
                 int ADDRESS;
                 std::cin >> PID >> ADDRESS;
                 hashtable->read_PID(PID, ADDRESS);
             }
             else if (command == "DELETE")
             {
-                int PID;
+                unsigned int  PID;
                 std::cin >> PID;
                 hashtable->delete_PID(PID);
             }
@@ -70,6 +69,7 @@ int main()
         }
         delete hashtable;
     }
+
     if (hash_type == "ORDERED")
     {
         SeparateChainingHT* ordered_hashtable;
@@ -84,19 +84,19 @@ int main()
             }
             else if (command == "INSERT")
             {
-                int PID;
+                unsigned int  PID;
                 std::cin >> PID;
                 ordered_hashtable->insert_PID(PID);
             }
             else if (command == "SEARCH")
             {
-                int PID;
+                unsigned int  PID;
                 std::cin >> PID;
                 ordered_hashtable->search_PID(PID);
             }
             else if (command == "WRITE")
             {
-                int PID;
+                unsigned int  PID;
                 int ADDRESS;
                 int value;
                 std::cin >> PID >> ADDRESS >> value;
@@ -104,14 +104,14 @@ int main()
             }
             else if (command == "READ")
             {
-                int PID;
+                unsigned int  PID;
                 int ADDRESS;
                 std::cin >> PID >> ADDRESS;
                 ordered_hashtable->read_PID(PID, ADDRESS);
             }
             else if (command == "DELETE")
             {
-                int PID;
+                unsigned int  PID;
                 std::cin >> PID;
                 ordered_hashtable->delete_PID(PID);
             }

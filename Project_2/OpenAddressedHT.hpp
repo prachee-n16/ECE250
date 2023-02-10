@@ -30,17 +30,17 @@ public:
     ~OpenAddressedHT();
 
     // Insert PID and allocate memory
-    void insert_PID(int id);
+    void insert_PID(unsigned int id);
 
     // Search for key PID in Hash table
-    void search_PID(int id);
+    void search_PID(unsigned int id);
 
     // Write a value to memory
-    void write_PID(int id, int addr_virtual, int value);
+    void write_PID(unsigned int id, int addr_virtual, int value);
 
     // Read a value from memory
-    void read_PID(int id, int addr_virtual);
+    void read_PID(unsigned int id, int addr_virtual);
 
     // Delete a key PID from hash table
-    void delete_PID(int id);
+    void delete_PID(unsigned int id);
 };
