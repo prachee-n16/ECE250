@@ -15,7 +15,7 @@ int main()
     std::string hash_type;
 
     std::cin >> hash_type;
-    
+
     // OpenAddressed hash table instance
     if (hash_type == "OPEN")
     {
@@ -114,6 +114,12 @@ int main()
                 int PID;
                 std::cin >> PID;
                 ordered_hashtable->delete_PID(PID);
+            }
+            else if (command == "PRINT")
+            {
+                int m;
+                std::cin >> m;
+                ordered_hashtable->print_PID(m);
             }
             else if (command == "END")
             {

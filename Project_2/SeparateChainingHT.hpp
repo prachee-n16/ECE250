@@ -49,5 +49,5 @@ public:
     void delete_PID(int id);
 
     // Print  a key PID from hash table
-    void print_PID(int id);
+    void print_PID(int m);
 };

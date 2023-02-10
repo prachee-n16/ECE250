@@ -144,6 +144,10 @@ void SeparateChainingHT::delete_PID(int id)
 };
 
 // Print  a key PID from hash table
-void SeparateChainingHT::print_PID(int id){
-    
+void SeparateChainingHT::print_PID(int m){
+    // Set probe using given hash function
+    for (int i = 0; i < process[m].size(); i++) {
+        std::cout << process[m][i].get_PID() << " ";
+    }
+    std::cout << std::endl;
 };
