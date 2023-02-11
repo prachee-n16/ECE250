@@ -13,7 +13,6 @@ class Process {
     public:
         //Constructor and Destructor
         Process();
-        ~Process();
 
         // Setter and getter functions for each variable
         void set_PID(unsigned int id);

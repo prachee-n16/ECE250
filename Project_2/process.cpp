@@ -8,11 +8,6 @@ Process::Process()
     isProcessCreated = false;
 }
 
-// Destructor
-Process::~Process()
-{
-}
-
 // Setter and getter functions for each variable
 void Process::set_PID(unsigned int id)
 {

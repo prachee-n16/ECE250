@@ -68,9 +68,6 @@ void OpenAddressedHT::insert_PID(unsigned int id)
         probe = (probe + offset) % HT_size;
     };
 
-    // FIXME: When adding to memory, do it in such a way that
-    //  It's ordered from the get go
-    //  Set PID and physical address
     process[probe].set_isProcessCreated(true);
     process[probe].set_PID(id);
 
@@ -207,7 +204,7 @@ void OpenAddressedHT::delete_PID(unsigned int id)
     {
         if (process[probe].get_PID() == id)
         {
-            int index = process[probe].get_addr_physical();
+            int index = process[probe].get_addr_physical()/P;
             pages_used[index] = 0;
             current_pages_used -= 1;
 

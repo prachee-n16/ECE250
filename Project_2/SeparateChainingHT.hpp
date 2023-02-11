@@ -13,7 +13,7 @@ private:
     int *memory;
 
     // Hash table of process id's
-    std::vector<Process> *process;
+    std::vector<Process*> *process;
 
     // Maximum size of hash table
     int HT_size;
