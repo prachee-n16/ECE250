@@ -9,7 +9,7 @@ int main();
 
 int main() {
     // The trie structure
-    trie MyTrie;
+    Trie spellchecker;
 
     // Store user's input command
     string command;
@@ -30,12 +30,14 @@ int main() {
         } else if (command == "i") {
             string word;
             std::cin >> word;
+            
+            spellchecker.insert_word(word);
         } else if (command == "c") {
 
         } else if (command == "e") {
 
         } else if (command == "p") {
-
+            spellchecker.print_trie();
         } else if (command == "spellcheck") {
 
         } else if (command == "empty") {
