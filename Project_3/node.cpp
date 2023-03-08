@@ -46,14 +46,6 @@ Node** Node::get_p_next(){
     return p_next;
 };
 
-bool Node::get_end() {
+bool Node::is_end() {
     return eow;
 }
-
-Node* Node::return_child(char s){
-    if (p_next[int(s) - 65]->get_letter() != '\0') { 
-        return nullptr;
-    } else {
-        return p_next[int(s) - 65];
-    }
-};

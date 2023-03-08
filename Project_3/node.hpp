@@ -30,7 +30,5 @@ class Node {
         char get_letter();
         Node* get_p_prev();
         Node** get_p_next();
-        bool get_end();
-
-        Node* return_child(char s);
+        bool is_end();
 };

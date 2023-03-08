@@ -17,76 +17,74 @@ Trie::~Trie(){
 
 void Trie::insert_word(std::string word)
 {
-    /** TODO:
-     *  Need to make sure that if I insert two same letters, both of them are not being added (m and m u know)
-     *  Create print function to test this out
-     */
-
-    // Temp will store where we are when inserting letters
     Node *current = root;
-
     for (int i = 0; i < word.length(); i++)
     {
-        // Check to see if we need to add node or does it already exist
-        if (current->return_child(word[i]) == nullptr)
+        Node **children = current->get_p_next();
+        // New node being added to the tree
+        if (children[int(word[i])-65] == nullptr)
         {
-            // Will store the next one!
             Node *next = new Node();
             next->set_letter(word[i]);
             next->set_p_prev(current);
             current->set_p_next(next);
             current = next;
-        }
-        else
-        {
-            // If this node already exists
-            Node *next = current->return_child(word[i]);
-            current->set_p_next(next);
-            current = next;
+        } else {
+            current = children[int(word[i])-65];
         }
     }
     current->set_end();
+    num_words++;
 };
 
 // Recursive DFS search
 void Trie::print_trie()
 {
-    // Temp will store where we are when inserting letters
     Node *current = root;
     Node **children = current->get_p_next();
     std::string word = "";
 
+    // Take the root and go through 26 letters
     for (int i = 0; i < 26; i++)
     {
+        // if one of the letter is there
         if (children[i] != nullptr)
         {
-            std::cout << children[i]->get_letter();
             word = children[i]->get_letter();
+            // Check children and the word we are working on
             print_trie_helper(children[i], word);
-            std::cout << std::endl;
+            word.pop_back();
         }
     }
+    std::cout << std::endl;
 }
 
 void Trie::print_trie_helper(Node *current, std::string word)
 {
-    if (current->get_p_next() != nullptr)
+    Node **children = current->get_p_next();
+    for (int i = 0; i < 26; i++)
     {
-        Node **children = current->get_p_next();
-        for (int i = 0; i < 26; i++)
+        if (children[i] != nullptr)
         {
-            if (children[i] != nullptr)
+            word += children[i]->get_letter();
+            if (children[i]->is_end() == true)
             {
-                word += children[i]->get_letter();
-
-                std::cout << children[i]->get_letter();
-                if (children[i]->get_end() == true)
-                {
-                    std::cout << word << " ";
-                }
-                print_trie_helper(children[i], word);
+                std::cout << word << " ";
             }
+            print_trie_helper(children[i], word);
+            word.pop_back();
         }
-    };
-    return;
+    }
+}
+
+void Trie::is_empty() {
+    if (num_words == 0) {
+        std::cout << 1 << std::endl;
+    } else {
+        std::cout << 0 << std::endl;
+    }
+}
+
+void Trie::size() {
+    std::cout << num_words << std::endl;
 }
