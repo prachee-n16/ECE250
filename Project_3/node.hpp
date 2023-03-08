@@ -36,6 +36,6 @@ class Node {
 class illegal_exception {
     public:
         illegal_exception() {
-            std::cout << "illegal exception" << std::endl;
+            std::cout << "illegal argument" << std::endl;
         };
 };

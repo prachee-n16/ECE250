@@ -52,6 +52,7 @@ int main() {
             spellchecker.is_empty();
         } else if (command == "clear") {
             spellchecker.deleteTrie();
+            std::cout << "success" << std::endl;
         } else if (command == "size") {
             spellchecker.size();
         } else if (command == "exit") {

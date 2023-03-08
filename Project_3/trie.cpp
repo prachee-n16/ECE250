@@ -12,8 +12,10 @@ Trie::Trie()
     num_words = 0;
 };
 
-Trie::~Trie(){
-
+Trie::~Trie()
+{
+    deleteTrie();
+    delete root;
 };
 
 void Trie::insert_word(std::string word)
@@ -48,7 +50,6 @@ void Trie::insert_word(std::string word)
             num_words++;
             std::cout << "success" << std::endl;
         }
-        
     }
     catch (const illegal_exception &e)
     {
@@ -78,7 +79,7 @@ void Trie::load_file(std::string word)
             }
         }
         if (current->is_end() == false)
-        {        
+        {
             current->set_end(true);
             num_words++;
         }
@@ -136,6 +137,13 @@ void Trie::deleteWord(std::string word)
 {
     try
     {
+        for (int i = 0; i < word.length(); i++)
+        {
+            if (!(65 <= int(word[i]) && int(word[i]) <= 90))
+            {
+                throw illegal_exception();
+            }
+        }
         if (num_words == 0)
         {
             std::cout << "failure" << std::endl;
@@ -147,10 +155,7 @@ void Trie::deleteWord(std::string word)
         for (int i = 0; i < word.length(); i++)
         {
             Node **children = current->get_p_next();
-            if (!(65 <= int(word[i]) && int(word[i]) <= 90))
-            {
-                throw illegal_exception();
-            }
+
             if (children[int(word[i]) - 65] == nullptr)
             {
                 std::cout << "failure" << std::endl;
@@ -178,13 +183,14 @@ void Trie::deleteWord(std::string word)
 
         // if it's the case that there are nothing next,
         // work backwards and delete the nodes
-        for (int i = 1; i < word.size(); i++) {
+        for (int i = 1; i < word.size(); i++)
+        {
             Node *parent = current->get_p_prev();
             delete current;
             current = parent;
         }
         children = current->get_p_next();
-        children[int(word[1])-65] = nullptr;
+        children[int(word[1]) - 65] = nullptr;
 
         std::cout << "success" << std::endl;
         num_words -= 1;
@@ -253,6 +259,8 @@ void Trie::getWordCountWithPrefix(std::string prefix)
         }
 
         int count = 0;
+        if (current->is_end() == true)
+            count++;
         getWordCountWithPrefixhelper(current, &count);
         std::cout << "count is " << count << std::endl;
     }
@@ -298,9 +306,9 @@ void Trie::spellcheckTrie(std::string word)
         std::cout << "correct" << std::endl;
         return;
     }
-    
+
     print_trie_helper(current, word);
-    std::cout << std::endl;
+    //std::cout << std::endl;
 }
 
 void Trie::is_empty()
