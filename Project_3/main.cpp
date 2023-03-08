@@ -22,30 +22,38 @@ int main() {
     while (cin >> command) {
         if (command == "load") {
             while (words >> addWord) {
-                // Insert word here!
+                spellchecker.load_file(addWord);
             }
             words.close();
-            cout << "success" << endl;
-
+            std::cout << "success" << std::endl;
         } else if (command == "i") {
             string word;
             std::cin >> word;
             
             spellchecker.insert_word(word);
         } else if (command == "c") {
+            string prefix;
+            std::cin >> prefix;
 
+            spellchecker.getWordCountWithPrefix(prefix);
         } else if (command == "e") {
+            string word;
+            std::cin >> word;
 
+            spellchecker.deleteWord(word);
         } else if (command == "p") {
             spellchecker.print_trie();
         } else if (command == "spellcheck") {
-
+            string word;
+            std::cin >> word;
+            
+            spellchecker.spellcheckTrie(word);
         } else if (command == "empty") {
-
+            spellchecker.is_empty();
         } else if (command == "clear") {
-
+            spellchecker.deleteTrie();
         } else if (command == "size") {
-
+            spellchecker.size();
         } else if (command == "exit") {
             break;
         }

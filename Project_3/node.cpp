@@ -16,15 +16,15 @@ Node::~Node(){};
 void Node::set_letter(char s){    
     // Add code here to check if it's capital letter or not
     if (!(65 <= int(s) && int(s) <= 90)) {
-        std::cout << "error" << std::endl;
+        throw illegal_exception();
         return;
     } else {
         letter = s;
     }
 };
 
-void Node::set_end(){
-    eow=true;
+void Node::set_end(bool end){
+    eow = end;
 };
 
 void Node::set_p_prev(Node *p){

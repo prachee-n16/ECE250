@@ -16,9 +16,18 @@ class Trie {
         ~Trie();
 
         void insert_word(std::string word);
+        void load_file(std::string word);
         void print_trie();
         void print_trie_helper(Node* current, std::string word);
 
         void is_empty();
         void size();
+        void getWordCountWithPrefix(std::string prefix);
+        void getWordCountWithPrefixhelper(Node *current, int *count);
+
+        void deleteWord(std::string word);
+        void deleteTrie();
+        void deleteTrie_helper(Node *current);
+
+        void spellcheckTrie(std::string word);
 };

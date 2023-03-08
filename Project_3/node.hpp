@@ -25,10 +25,17 @@ class Node {
         void set_letter(char s);
         void set_p_prev(Node *p);
         void set_p_next(Node *p);
-        void set_end();
+        void set_end(bool end);
 
         char get_letter();
         Node* get_p_prev();
         Node** get_p_next();
         bool is_end();
+};
+
+class illegal_exception {
+    public:
+        illegal_exception() {
+            std::cout << "illegal exception" << std::endl;
+        };
 };
