@@ -112,7 +112,10 @@ void Trie::print_trie()
             word.pop_back();
         }
     }
-    std::cout << std::endl;
+    if (num_words != 0)
+    {
+        std::cout << std::endl;
+    }
 }
 
 void Trie::print_trie_helper(Node *current, std::string word)
@@ -307,8 +310,11 @@ void Trie::spellcheckTrie(std::string word)
         return;
     }
 
+    
     print_trie_helper(current, word);
-    //std::cout << std::endl;
+    
+    
+    std::cout << std::endl;
 }
 
 void Trie::is_empty()
