@@ -313,7 +313,6 @@ void Trie::spellcheckTrie(std::string word)
     
     print_trie_helper(current, word);
     
-    
     std::cout << std::endl;
 }
 
