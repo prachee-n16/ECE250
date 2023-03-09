@@ -148,6 +148,7 @@ void Trie::deleteWord(std::string word)
                 throw illegal_exception();
             }
         }
+
         // if empty trie
         if (num_words == 0)
         {
@@ -169,13 +170,17 @@ void Trie::deleteWord(std::string word)
             }
             current = children[int(word[i]) - 65];
         }
-        // current is now this word
+
+        // current is now this end of word
         Node **children = current->get_p_next();
+
         // check if this is the end of a word
-        if (current->is_end() == false) {
+        if (current->is_end() == false)
+        {
             std::cout << "failure" << std::endl;
             return;
         }
+
         // so check if there's any thing next
         for (int i = 0; i < 26; i++)
         {
@@ -187,18 +192,37 @@ void Trie::deleteWord(std::string word)
                 std::cout << "success" << std::endl;
                 num_words -= 1;
                 return;
-                
             }
         }
 
+        current->set_end(false);
+        Node *parent = current->get_p_prev();
+
         // if it's the case that there are nothing next,
         // work backwards and delete the nodes
-        for (int i = 1; i < word.size(); i++)
+        for (int i = word.size() - 1; i > 1; i--)
         {
-            Node *parent = current->get_p_prev();
+            parent = current->get_p_prev();
+
+            children = parent->get_p_next();
+
+            children[int(word[i]) - 65] = nullptr;
+
+            for (int i = 0; i < 26; i++)
+            {
+                // if there is something next
+                if (children[i] != nullptr)
+                {
+                    std::cout << "success" << std::endl;
+                    num_words -= 1;
+                    delete current;
+                    return;
+                }
+            }
             delete current;
             current = parent;
         }
+
         children = current->get_p_next();
         children[int(word[1]) - 65] = nullptr;
 
@@ -301,41 +325,46 @@ void Trie::spellcheckTrie(std::string word)
     std::string prefix = "";
 
     // check if word is there where word = 1 letter long
-    if (word.length() == 1) {
+    if (word.length() == 1)
+    {
         Node **children = current->get_p_next();
-        
-        if ((children[int(word[0]) - 65] != nullptr)) {
+
+        if ((children[int(word[0]) - 65] != nullptr))
+        {
             if (children[int(word[0]) - 65]->is_end() == true)
             {
                 std::cout << "correct" << std::endl;
                 return;
             }
-            std::cout << children[int(word[0]) - 65]->get_letter() << std::endl;
-            //print_trie_helper(children[int(word[0]) - 65], word);
+            print_trie_helper(children[int(word[0]) - 65], word);
         }
-        
+
         std::cout << std::endl;
         return;
     };
+
     // if word greater than 1 letter
     for (int i = 0; i < word.length(); i++)
     {
         Node **children = current->get_p_next();
-        prefix += word[i];
+
         if ((children[int(word[i]) - 65] == nullptr) && (current != root))
         {
             if (current->is_end() == true)
             {
                 std::cout << prefix << " ";
             }
-            prefix += word[i+1];
+            
             print_trie_helper(current, prefix);
             std::cout << std::endl;
             return;
-        } else if ((current == root) && (children[int(word[i]) - 65] == nullptr)) {
+        }
+        else if ((current == root) && (children[int(word[i]) - 65] == nullptr))
+        {
             std::cout << std::endl;
             return;
         }
+        prefix += word[i];
         current = children[int(word[i]) - 65];
     }
 

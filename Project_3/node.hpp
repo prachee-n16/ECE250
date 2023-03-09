@@ -31,6 +31,8 @@ class Node {
         Node* get_p_prev();
         Node** get_p_next();
         bool is_end();
+
+        void reinitialize_node();
 };
 
 class illegal_exception {
