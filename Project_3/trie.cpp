@@ -140,6 +140,7 @@ void Trie::deleteWord(std::string word)
 {
     try
     {
+        // check if word being entered is lower case
         for (int i = 0; i < word.length(); i++)
         {
             if (!(65 <= int(word[i]) && int(word[i]) <= 90))
@@ -147,6 +148,7 @@ void Trie::deleteWord(std::string word)
                 throw illegal_exception();
             }
         }
+        // if empty trie
         if (num_words == 0)
         {
             std::cout << "failure" << std::endl;
@@ -154,7 +156,7 @@ void Trie::deleteWord(std::string word)
         }
 
         Node *current = root;
-
+        // find the last node with this word
         for (int i = 0; i < word.length(); i++)
         {
             Node **children = current->get_p_next();
@@ -167,9 +169,13 @@ void Trie::deleteWord(std::string word)
             }
             current = children[int(word[i]) - 65];
         }
-
+        // current is now this word
         Node **children = current->get_p_next();
-
+        // check if this is the end of a word
+        if (current->is_end() == false) {
+            std::cout << "failure" << std::endl;
+            return;
+        }
         // so check if there's any thing next
         for (int i = 0; i < 26; i++)
         {
@@ -181,6 +187,7 @@ void Trie::deleteWord(std::string word)
                 std::cout << "success" << std::endl;
                 num_words -= 1;
                 return;
+                
             }
         }
 
@@ -293,7 +300,7 @@ void Trie::spellcheckTrie(std::string word)
     Node *current = root;
     std::string prefix = "";
 
-    // check if word is there
+    // check if word is there where word = 1 letter long
     if (word.length() == 1) {
         Node **children = current->get_p_next();
         
@@ -303,23 +310,25 @@ void Trie::spellcheckTrie(std::string word)
                 std::cout << "correct" << std::endl;
                 return;
             }
-            print_trie_helper(children[int(word[0]) - 65], word);
+            std::cout << children[int(word[0]) - 65]->get_letter() << std::endl;
+            //print_trie_helper(children[int(word[0]) - 65], word);
         }
-
         
         std::cout << std::endl;
         return;
     };
-
+    // if word greater than 1 letter
     for (int i = 0; i < word.length(); i++)
     {
         Node **children = current->get_p_next();
+        prefix += word[i];
         if ((children[int(word[i]) - 65] == nullptr) && (current != root))
         {
             if (current->is_end() == true)
             {
                 std::cout << prefix << " ";
             }
+            prefix += word[i+1];
             print_trie_helper(current, prefix);
             std::cout << std::endl;
             return;
@@ -327,7 +336,6 @@ void Trie::spellcheckTrie(std::string word)
             std::cout << std::endl;
             return;
         }
-        prefix += word[i];
         current = children[int(word[i]) - 65];
     }
 
