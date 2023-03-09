@@ -347,14 +347,12 @@ void Trie::spellcheckTrie(std::string word)
     for (int i = 0; i < word.length(); i++)
     {
         Node **children = current->get_p_next();
-
         if ((children[int(word[i]) - 65] == nullptr) && (current != root))
         {
             if (current->is_end() == true)
             {
                 std::cout << prefix << " ";
             }
-            
             print_trie_helper(current, prefix);
             std::cout << std::endl;
             return;
@@ -372,8 +370,13 @@ void Trie::spellcheckTrie(std::string word)
     {
         std::cout << "correct" << std::endl;
         return;
+    } else {
+        print_trie_helper(current, prefix);
+        std::cout << std::endl;
+        return;
     }
 }
+
 
 void Trie::is_empty()
 {
