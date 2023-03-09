@@ -291,16 +291,43 @@ void Trie::getWordCountWithPrefixhelper(Node *current, int *count)
 void Trie::spellcheckTrie(std::string word)
 {
     Node *current = root;
+    std::string prefix = "";
+
     // check if word is there
+    if (word.length() == 1) {
+        Node **children = current->get_p_next();
+        
+        if ((children[int(word[0]) - 65] != nullptr)) {
+            if (children[int(word[0]) - 65]->is_end() == true)
+            {
+                std::cout << "correct" << std::endl;
+                return;
+            }
+            print_trie_helper(children[int(word[0]) - 65], word);
+        }
+
+        
+        std::cout << std::endl;
+        return;
+    };
+
     for (int i = 0; i < word.length(); i++)
     {
         Node **children = current->get_p_next();
-        if (children[int(word[i]) - 65] == nullptr)
+        if ((children[int(word[i]) - 65] == nullptr) && (current != root))
         {
-            // no prefix there
+            if (current->is_end() == true)
+            {
+                std::cout << prefix << " ";
+            }
+            print_trie_helper(current, prefix);
+            std::cout << std::endl;
+            return;
+        } else if ((current == root) && (children[int(word[i]) - 65] == nullptr)) {
             std::cout << std::endl;
             return;
         }
+        prefix += word[i];
         current = children[int(word[i]) - 65];
     }
 
@@ -309,11 +336,6 @@ void Trie::spellcheckTrie(std::string word)
         std::cout << "correct" << std::endl;
         return;
     }
-
-    
-    print_trie_helper(current, word);
-    
-    std::cout << std::endl;
 }
 
 void Trie::is_empty()
