@@ -224,6 +224,7 @@ void Trie::deleteWord(std::string word)
                 std::cout << "success" << std::endl;
                 num_words -= 1;
                 delete current;
+                current = nullptr;
                 return;
             }
 
@@ -235,6 +236,7 @@ void Trie::deleteWord(std::string word)
                     std::cout << "success" << std::endl;
                     num_words -= 1;
                     delete current;
+                    current = nullptr;
                     return;
                 }
             }
@@ -279,13 +281,11 @@ void Trie::deleteTrie_helper(Node *current)
     {
         if (children[i] != nullptr)
         {
-            if (children[i]->is_end() == true)
-            {
-                break;
-            }
-            deleteTrie_helper(children[i]);
-            delete children[i];
-            children[i] = nullptr;
+            
+                deleteTrie_helper(children[i]);
+                delete children[i];
+                children[i] = nullptr;
+            
         }
     }
 }
