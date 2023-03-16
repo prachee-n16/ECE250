@@ -35,9 +35,9 @@ class Node {
         void reinitialize_node();
 };
 
-class illegal_exception {
+class illegal_exception : public std::exception {
     public:
-        illegal_exception() {
-            std::cout << "illegal argument" << std::endl;
+        const char* what() const noexcept override {
+            return "illegal argument";
         };
 };

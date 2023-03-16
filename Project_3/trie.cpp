@@ -20,8 +20,14 @@ Trie::~Trie()
 
 void Trie::insert_word(std::string word)
 {
-    try
-    {
+    try {
+        for (int i = 0; i < word.length(); i++) {
+            if (!(65 <= word[i] && word[i] <= 90)) {
+                throw illegal_exception();
+                return;
+            }
+        }
+
         Node *current = root;
         for (int i = 0; i < word.length(); i++)
         {
@@ -50,9 +56,9 @@ void Trie::insert_word(std::string word)
             num_words++;
             std::cout << "success" << std::endl;
         }
-    }
-    catch (const illegal_exception &e)
+    } catch (const illegal_exception &e)
     {
+        std::cout << e.what() << std::endl;
     }
 };
 
@@ -60,6 +66,12 @@ void Trie::load_file(std::string word)
 {
     try
     {
+        for (int i = 0; i < word.length(); i++) {
+            if (!(65 <= word[i] && word[i] <= 90)) {
+                throw illegal_exception();
+                return;
+            }
+        }
         Node *current = root;
         for (int i = 0; i < word.length(); i++)
         {
@@ -86,6 +98,7 @@ void Trie::load_file(std::string word)
     }
     catch (const illegal_exception &e)
     {
+        std::cout << e.what() << std::endl;
     }
 };
 
@@ -165,7 +178,6 @@ void Trie::deleteWord(std::string word)
             if (children[int(word[i]) - 65] == nullptr)
             {
                 std::cout << "failure" << std::endl;
-                num_words -= 1;
                 return;
             }
             current = children[int(word[i]) - 65];
@@ -208,6 +220,13 @@ void Trie::deleteWord(std::string word)
 
             children[int(word[i]) - 65] = nullptr;
 
+            if (parent->is_end() == true) {
+                std::cout << "success" << std::endl;
+                num_words -= 1;
+                delete current;
+                return;
+            }
+
             for (int i = 0; i < 26; i++)
             {
                 // if there is something next
@@ -231,6 +250,7 @@ void Trie::deleteWord(std::string word)
     }
     catch (const illegal_exception &e)
     {
+        std::cout << e.what() << std::endl;
     }
 };
 
@@ -276,13 +296,17 @@ void Trie::getWordCountWithPrefix(std::string prefix)
     {
         Node *current = root;
 
+        for (int i = 0; i < prefix.length(); i++) {
+            if (!(65 <= prefix[i] && prefix[i] <= 90)) {
+                throw illegal_exception();
+                return;
+            }
+        }
+
         for (int i = 0; i < prefix.length(); i++)
         {
             Node **children = current->get_p_next();
-            if (!(65 <= int(prefix[i]) && int(prefix[i]) <= 90))
-            {
-                throw illegal_exception();
-            }
+            
             if (children[int(prefix[i]) - 65] == nullptr)
             {
                 // no prefix there
@@ -300,6 +324,7 @@ void Trie::getWordCountWithPrefix(std::string prefix)
     }
     catch (const illegal_exception &e)
     {
+        std::cout << e.what() << std::endl;
     }
 };
 
@@ -336,8 +361,13 @@ void Trie::spellcheckTrie(std::string word)
             return;
         } else if (children[int(word[i]) - 65] == nullptr) {
             // if we find a letter does not exist
+            if (current->is_end() == true)
+            {
+                std::cout << prefix << " ";
+            }
             print_trie_helper(current, prefix);
             std::cout << std::endl;
+            return;
         }
 
         prefix += word[i];
@@ -348,7 +378,10 @@ void Trie::spellcheckTrie(std::string word)
 
     // on the last node check if word is in trie
     if (current->is_end() == true) {
-        std::cout << "success" << std::endl;
+        std::cout << "correct" << std::endl;
+    } else {
+        print_trie_helper(current, prefix);
+        std::cout << std::endl;
     }
 }
 
