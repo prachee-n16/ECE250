@@ -15,8 +15,7 @@ class Trie {
         Trie();
         ~Trie();
 
-        void insert_word(std::string word);
-        void load_file(std::string word);
+        void insert_word(std::string word, std::string type);
         void print_trie();
         void print_trie_helper(Node* current, std::string word);
 

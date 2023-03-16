@@ -1,5 +1,5 @@
 #include "trie.hpp"
-// Libraries
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -20,9 +20,10 @@ int main() {
     string addWord;
 
     while (cin >> command) {
+        // Load words from a file
         if (command == "load") {
             while (words >> addWord) {
-                spellchecker.load_file(addWord);
+                spellchecker.insert_word(addWord, "LOAD");
             }
             words.close();
             std::cout << "success" << std::endl;
@@ -30,7 +31,7 @@ int main() {
             string word;
             std::cin >> word;
             
-            spellchecker.insert_word(word);
+            spellchecker.insert_word(word, "INSERT");
         } else if (command == "c") {
             string prefix;
             std::cin >> prefix;

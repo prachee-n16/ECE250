@@ -1,26 +1,30 @@
 #include "trie.hpp"
 #include "node.hpp"
 
-// Libraries
 #include <iostream>
 #include <string>
 
+// Constructor
 Trie::Trie()
 {
     // Root of the binary tree
     root = new Node();
+    // Number of words is 0
     num_words = 0;
 };
 
+// Destructor
 Trie::~Trie()
 {
     deleteTrie();
     delete root;
 };
 
-void Trie::insert_word(std::string word)
+// Insert a word into tree
+void Trie::insert_word(std::string word, std::string type)
 {
     try {
+        // If the word has a lower case letter
         for (int i = 0; i < word.length(); i++) {
             if (!(65 <= word[i] && word[i] <= 90)) {
                 throw illegal_exception();
@@ -28,6 +32,7 @@ void Trie::insert_word(std::string word)
             }
         }
 
+        // Go through the entire word
         Node *current = root;
         for (int i = 0; i < word.length(); i++)
         {
@@ -41,62 +46,29 @@ void Trie::insert_word(std::string word)
                 current->set_p_next(next);
                 current = next;
             }
+            // If already existing, 
             else
             {
+                // Move to the next node
                 current = children[int(word[i]) - 65];
             }
         }
-        if (current->is_end() == true)
+        // If this was already a word
+        if (current->is_end() == true && type == "INSERT")
         {
             std::cout << "failure" << std::endl;
         }
         else
         {
+            // Make this the end of word
+            // Add it to total count
             current->set_end(true);
             num_words++;
-            std::cout << "success" << std::endl;
+            if (type == "INSERT") {
+                std::cout << "success" << std::endl;
+            }
         }
     } catch (const illegal_exception &e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-};
-
-void Trie::load_file(std::string word)
-{
-    try
-    {
-        for (int i = 0; i < word.length(); i++) {
-            if (!(65 <= word[i] && word[i] <= 90)) {
-                throw illegal_exception();
-                return;
-            }
-        }
-        Node *current = root;
-        for (int i = 0; i < word.length(); i++)
-        {
-            Node **children = current->get_p_next();
-            // New node being added to the tree
-            if (children[int(word[i]) - 65] == nullptr)
-            {
-                Node *next = new Node();
-                next->set_letter(word[i]);
-                next->set_p_prev(current);
-                current->set_p_next(next);
-                current = next;
-            }
-            else
-            {
-                current = children[int(word[i]) - 65];
-            }
-        }
-        if (current->is_end() == false)
-        {
-            current->set_end(true);
-            num_words++;
-        }
-    }
-    catch (const illegal_exception &e)
     {
         std::cout << e.what() << std::endl;
     }
@@ -258,34 +230,43 @@ void Trie::deleteWord(std::string word)
 
 void Trie::deleteTrie()
 {
+    // Set current pointer to be root
     Node *current = root;
+    // Set children here
     Node **children = current->get_p_next();
 
+    // For loop where we go through every child
     for (int i = 0; i < 26; i++)
     {
+        // If there is a non-null node
         if (children[i] != nullptr)
         {
+            // Find it's children nodes and delete them
             deleteTrie_helper(children[i]);
+            // Delete this child node
             delete children[i];
             children[i] = nullptr;
         }
     }
+    // We have cleared trie so number of words = 0
     num_words = 0;
 }
 
 void Trie::deleteTrie_helper(Node *current)
 {
+    // Find child of given node
     Node **children = current->get_p_next();
 
     for (int i = 0; i < 26; i++)
     {
+        // If this is non-null child
         if (children[i] != nullptr)
         {
-            
-                deleteTrie_helper(children[i]);
-                delete children[i];
-                children[i] = nullptr;
-            
+            // Find it's children
+            deleteTrie_helper(children[i]);
+            // Delete this node
+            delete children[i];
+            children[i] = nullptr;
         }
     }
 }
