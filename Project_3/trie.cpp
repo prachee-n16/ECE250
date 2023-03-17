@@ -331,12 +331,10 @@ void Trie::spellcheckTrie(std::string word)
 {
     Node *current = root;
     std::string prefix = "";
-    int len = word.length() - 1;
 
     for (int i = 0; i < word.length(); i++)
     {
         Node **children = current->get_p_next();
-        
         // if the first letter is not in the trie
         if (children[int(word[i]) - 65] == nullptr && i == 0)
         {  
@@ -354,8 +352,6 @@ void Trie::spellcheckTrie(std::string word)
         }
 
         prefix += word[i];
-        // length of word decreases
-        len = len - 1;
         current = children[int(word[i]) - 65];
     }
 
