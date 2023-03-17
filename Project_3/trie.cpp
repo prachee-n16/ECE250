@@ -54,9 +54,11 @@ void Trie::insert_word(std::string word, std::string type)
             }
         }
         // If this was already a word
-        if (current->is_end() == true && type == "INSERT")
+        if (current->is_end() == true)
         {
+            if (type == "INSERT"){
             std::cout << "failure" << std::endl;
+            }
         }
         else
         {
