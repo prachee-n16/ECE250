@@ -20,7 +20,6 @@ class Node {
     public:
         // Getter and setter functions for private variables
         Node();
-        ~Node();
 
         void set_letter(char s);
         void set_p_prev(Node *p);
@@ -31,8 +30,6 @@ class Node {
         Node* get_p_prev();
         Node** get_p_next();
         bool is_end();
-
-        void reinitialize_node();
 };
 
 class illegal_exception : public std::exception {

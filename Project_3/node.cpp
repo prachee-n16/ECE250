@@ -12,20 +12,9 @@ Node::Node()
     eow = false;
 };
 
-Node::~Node(){};
-
 void Node::set_letter(char s)
 {
-    // Add code here to check if it's capital letter or not
-    if (!(65 <= int(s) && int(s) <= 90))
-    {
-        throw illegal_exception();
-        return;
-    }
-    else
-    {
-        letter = s;
-    }
+    letter = s;
 };
 
 void Node::set_end(bool end)
@@ -60,15 +49,4 @@ Node **Node::get_p_next()
 bool Node::is_end()
 {
     return eow;
-}
-
-// do i need this? keeping it just in case
-void Node::reinitialize_node()
-{
-    p_prev = nullptr;
-    letter = '\0';
-    eow = false;
-    for (int i = 0; i < 26; i++){
-        p_next[i] = nullptr;
-    }
 }
