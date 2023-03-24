@@ -6,18 +6,12 @@
 
 using namespace std;
 
-/**
- * @note 
- * 
- * 
- */
-
 int main();
 
 int main() {
     // Store user's input command
     string command;
-    Graph* powerGrid;
+    Graph* powerGrid = new Graph();
 
     while (cin >> command) {
         if(command == "LOAD")
@@ -57,4 +51,5 @@ int main() {
             break;
         }
     }
+    delete powerGrid;
 }

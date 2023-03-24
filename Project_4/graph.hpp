@@ -6,7 +6,7 @@
 class Graph {
     private:
         // Adjacency-list representation
-        std::vector<std::tuple<int, int>> adj_list;
+        std::vector<std::tuple<int, int>> *adj_list;
 
     public:
         // Constructor
