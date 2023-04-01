@@ -46,7 +46,7 @@ int main() {
         } else if (command == "MST") {
             powerGrid->find_mst();
         } else if (command == "COST") {
-            powerGrid->cost_mst();
+            
         } else if (command == "END") {
             break;
         }
