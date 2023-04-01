@@ -8,7 +8,7 @@
 // Constructor
 Graph::Graph()
 {
-    adj_list = new std::vector<std::tuple<int, int, int>>[50000];
+    adj_list = new std::vector<std::tuple<int, int, int>>[50001];
 };
 // Destructor
 Graph::~Graph()
@@ -18,6 +18,17 @@ Graph::~Graph()
 
 // Insert lots of nodes into graph
 void Graph::load_graph(int a, int b, int w){
+    // illegal argument?
+    if (a > 50000 || a <= 0) {
+        return;
+    }
+    if (b > 50000 || b <= 0) {
+        return;
+    }
+    if (w<= 0) {
+        return;
+    }
+
     // Check if this edge is in the graph
     // We only need to check one node
 
@@ -67,6 +78,19 @@ void Graph::insert_edge(int a, int b, int w)
 {
     // Check if this edge is in the graph
     // We only need to check one node
+    // illegal argument?
+    if (a > 50000 || a <= 0) {
+        std::cout << "illegal argument" << std::endl;
+        return;
+    }
+    if (b > 50000 || b <= 0) {
+        std::cout << "illegal argument" << std::endl;
+        return;
+    }
+    if (w <= 0) {
+        std::cout << "illegal argument" << std::endl;
+        return;
+    }
 
     // If there are no adjacent nodes
     if (adj_list[a].size() != 0 || adj_list[b].size() != 0)
@@ -115,6 +139,11 @@ void Graph::insert_edge(int a, int b, int w)
 // Print edges from one node
 void Graph::print_adj_edges(int a)
 {
+    if (a > 50000 || a <= 0) {
+        std::cout << "illegal argument" << std::endl;
+        return;
+    }
+
     if (adj_list[a].size() == 0)
     {
         std::cout << "failure" << std::endl;
@@ -132,6 +161,11 @@ void Graph::print_adj_edges(int a)
 // Delete the node and related edges
 void Graph::delete_node(int a)
 {
+    if (a > 50000 || a <= 0) {
+        std::cout << "illegal argument" << std::endl;
+        return;
+    }
+
     if (adj_list[a].size() == 0)
     {
         std::cout << "failure" << std::endl;
@@ -168,7 +202,7 @@ void Graph::find_mst()
     int r;
 
     // Copy of the adjacent list to use
-    std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50000];
+    std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50001];
 
     // Store's MST
     std::vector<int> mst;
@@ -298,7 +332,7 @@ void Graph::cost_mst()
     int r;
 
     // Copy of the adjacent list to use
-    std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50000];
+    std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50001];
 
     // Store's MST
     std::vector<int> mst;
@@ -337,37 +371,46 @@ void Graph::cost_mst()
         // Print out this edge being added to MST
         cost += std::get<2>(u);
 
-        // Check if we had this vertex before
-        if (std::find(mst.begin(), mst.end(), std::get<0>(u)) == mst.end()) {
-            mst.push_back(std::get<0>(u));
-        } 
-        if (std::find(mst.begin(), mst.end(), std::get<1>(u)) == mst.end()) {
-            mst.push_back(std::get<1>(u));
-        } 
-
-        // Remove edge from list
-        int a = std::get<0>(u);
-        for (int i = 0; i < mst_adj_list[a].size(); i++) {
-            if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
-                mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
-                break;
+        // if both nodes are not already considered in MST
+        if (!((std::find(mst.begin(), mst.end(), std::get<0>(u)) != mst.end()) && (std::find(mst.begin(), mst.end(), std::get<1>(u)) != mst.end()))) {
+            // Check if we had this vertex before
+            if (std::find(mst.begin(), mst.end(), std::get<0>(u)) == mst.end()) {
+                mst.push_back(std::get<0>(u));
+            } 
+            if (std::find(mst.begin(), mst.end(), std::get<1>(u)) == mst.end()) {
+                mst.push_back(std::get<1>(u));
             }
-        }
 
-        // Remove edge from adjacency list of other node
-        int b = std::get<1>(u);
-        for (int i = 0; i < mst_adj_list[b].size(); i++)
-        {
-            if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
+            // Remove edge from list
+            int a = std::get<0>(u);
+            // Go to a's adjacency list
+            for (int i = 0; i < mst_adj_list[a].size(); i++) {
+                // if b = b
+                if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
+                    mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
+                    break;
+                }
+            }
+
+            // Remove edge from adjacency list of other node
+            int b = std::get<1>(u);
+            for (int i = 0; i < mst_adj_list[b].size(); i++)
             {
-                mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
-                break;
+                // if a = a
+                if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
+                {
+                    mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
+                    break;
+                }
             }
-        }
 
-        // Next, we take edges adjacent to b and add to Q
-        heap_sort(mst_adj_list[b]);
+            // Next, we take edges adjacent to b and add to Q
+            heap_sort(mst_adj_list[b]);
+        }
     }
-    
+
+    delete[] mst_adj_list;
+
     std::cout << "cost is " << cost << std::endl;
 };
+
