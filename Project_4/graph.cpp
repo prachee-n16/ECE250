@@ -216,6 +216,11 @@ void Graph::find_mst()
             n++;
         }
     }
+    if (n == 0 ){
+        std::cout << "failure" << std::endl;
+        delete[] mst_adj_list;
+        return;
+    }
     // Find a vertex in the graph
     for (int i = 0; i < 50000; i++)
     {
@@ -233,43 +238,53 @@ void Graph::find_mst()
     // this while loop is a joke rn for testing purposes
     while (mst.size() != n)
     {
+        std::cout << "Queue:" << std::endl;
+        for (int i = 0; i < Q.size(); i++) {
+            std::cout << std::get<0>(Q[i]) << " " << std::get<1>(Q[i]) << " " << std::get<2>(Q[i]) << std::endl;
+        }
+        std::cout << "Vertices " << mst.size() << " discovered out of " << n << std::endl;
+
         // Extract minimum from the queue
         std::tuple<int, int, int> u = Q[0];
         Q.erase(Q.begin());
 
         // Print out this edge being added to MST
-        std::cout << std::get<0>(u) << " " << std::get<1>(u) << " " << std::get<2>(u) << " ";
+        std::cout << "Edge chosen: " << std::get<0>(u) << " " << std::get<1>(u) << " " << std::get<2>(u) << " " << std::endl;
 
-        // Check if we had this vertex before
-        if (std::find(mst.begin(), mst.end(), std::get<0>(u)) == mst.end()) {
-            mst.push_back(std::get<0>(u));
-        } 
-        if (std::find(mst.begin(), mst.end(), std::get<1>(u)) == mst.end()) {
-            mst.push_back(std::get<1>(u));
-        } 
+        // If vertex has already been considered
+        // Don't consider it
+        
+            // Check if we had this vertex before
+            if (std::find(mst.begin(), mst.end(), std::get<0>(u)) == mst.end()) {
+                mst.push_back(std::get<0>(u));
+            } 
+            if (std::find(mst.begin(), mst.end(), std::get<1>(u)) == mst.end()) {
+                mst.push_back(std::get<1>(u));
+            } 
 
-        // Remove edge from list
-        int a = std::get<0>(u);
-        for (int i = 0; i < mst_adj_list[a].size(); i++) {
-            if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
-                mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
-                break;
+            // Remove edge from list
+            int a = std::get<0>(u);
+            for (int i = 0; i < mst_adj_list[a].size(); i++) {
+                if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
+                    mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
+                    break;
+                }
             }
-        }
 
-        // Remove edge from adjacency list of other node
-        int b = std::get<1>(u);
-        for (int i = 0; i < mst_adj_list[b].size(); i++)
-        {
-            if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
+            // Remove edge from adjacency list of other node
+            int b = std::get<1>(u);
+            for (int i = 0; i < mst_adj_list[b].size(); i++)
             {
-                mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
-                break;
+                if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
+                {
+                    mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
+                    break;
+                }
             }
-        }
 
-        // Next, we take edges adjacent to b and add to Q
-        heap_sort(mst_adj_list[b]);
+            // Next, we take edges adjacent to b and add to Q
+            heap_sort(mst_adj_list[std::get<1>(u)]);
+        
     }
     delete[] mst_adj_list;
     std::cout << std::endl;
@@ -357,8 +372,6 @@ void Graph::cost_mst()
             break;
         }
     }
-
-    
 
     // this while loop is a joke rn for testing purposes
     int cost = 0;
