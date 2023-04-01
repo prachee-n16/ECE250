@@ -27,6 +27,7 @@ class Graph {
         void delete_node(int a);
         //Find minimum spanning tree
         void find_mst();
+        void cost_mst();
 
         void heap_sort(std::vector<std::tuple<int, int, int>> p);
         void heapify(std::vector<std::tuple<int, int, int>> &q, int n, int i);

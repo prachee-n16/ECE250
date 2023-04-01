@@ -16,7 +16,50 @@ Graph::~Graph()
 };
 
 // Insert lots of nodes into graph
-void Graph::load_graph(int a, int b, int w){};
+void Graph::load_graph(int a, int b, int w){
+    // Check if this edge is in the graph
+    // We only need to check one node
+
+    // If there are no adjacent nodes
+    if (adj_list[a].size() != 0 || adj_list[b].size() != 0)
+    {
+        // Check which list has fewer adjacent nodes
+        if (adj_list[a].size() >= adj_list[b].size())
+        {
+            for (int i = 0; i < adj_list[b].size(); i++)
+            {
+                if (std::get<1>(adj_list[b][i]) == a)
+                {
+                    return;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < adj_list[a].size(); i++)
+            {
+                if (std::get<1>(adj_list[a][i]) == b)
+                {
+                    return;
+                }
+            }
+        }
+    }
+
+    // Two edges to insert into the vector!
+
+    // Consider a as the source node
+    // Consider b as the destination node
+    // The edge tuple is
+    std::tuple<int, int, int> edge = std::make_tuple(a, b, w);
+    adj_list[a].push_back(edge);
+
+    // Consider b as the source node
+    // Consider a as the destination node
+    // The edge tuple is
+    edge = std::make_tuple(b, a, w);
+    adj_list[b].push_back(edge);
+};
 
 // Insert node into graph
 void Graph::insert_edge(int a, int b, int w)
@@ -153,7 +196,6 @@ void Graph::find_mst()
     
 
     // this while loop is a joke rn for testing purposes
-    int x = 0;
     while (mst.size() != n)
     {
         // Extract minimum from the queue
@@ -193,7 +235,6 @@ void Graph::find_mst()
 
         // Next, we take edges adjacent to b and add to Q
         heap_sort(mst_adj_list[b]);
-        x++;
     }
     
     std::cout << std::endl;
@@ -245,4 +286,87 @@ void Graph::heapify(std::vector<std::tuple<int, int, int>> &q, int n, int i)
         swap(q[i], q[largest]);
         heapify(q, n, largest);
     }
+};
+
+
+// Find minimum spanning tree
+void Graph::cost_mst()
+{
+    Q.clear();
+    // PRIM'S ALGORITHM
+    int r;
+
+    // Copy of the adjacent list to use
+    std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50000];
+
+    // Store's MST
+    std::vector<int> mst;
+
+    int n = 0;
+    for (int i = 0; i < 50000; i++)
+    {
+        if (adj_list[i].size() != 0)
+        {
+            mst_adj_list[i] = adj_list[i];
+            n++;
+        }
+    }
+    // Find a vertex in the graph
+    for (int i = 0; i < 50000; i++)
+    {
+        if (!mst_adj_list[i].empty())
+        {
+            r = i;
+            // get all of it's edges
+            heap_sort(mst_adj_list[r]);
+            break;
+        }
+    }
+
+    
+
+    // this while loop is a joke rn for testing purposes
+    int cost = 0;
+    while (mst.size() != n)
+    {
+        // Extract minimum from the queue
+        std::tuple<int, int, int> u = Q[0];
+        Q.erase(Q.begin());
+
+        // Print out this edge being added to MST
+        cost += std::get<2>(u);
+
+        // Check if we had this vertex before
+        if (std::find(mst.begin(), mst.end(), std::get<0>(u)) == mst.end()) {
+            mst.push_back(std::get<0>(u));
+        } 
+        if (std::find(mst.begin(), mst.end(), std::get<1>(u)) == mst.end()) {
+            mst.push_back(std::get<1>(u));
+        } 
+
+        // Remove edge from list
+        int a = std::get<0>(u);
+        for (int i = 0; i < mst_adj_list[a].size(); i++) {
+            if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
+                mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
+                break;
+            }
+        }
+
+        // Remove edge from adjacency list of other node
+        int b = std::get<1>(u);
+        for (int i = 0; i < mst_adj_list[b].size(); i++)
+        {
+            if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
+            {
+                mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
+                break;
+            }
+        }
+
+        // Next, we take edges adjacent to b and add to Q
+        heap_sort(mst_adj_list[b]);
+    }
+    
+    std::cout << "cost is " << cost << std::endl;
 };

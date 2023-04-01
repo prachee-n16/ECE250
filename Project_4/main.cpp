@@ -8,46 +8,59 @@ using namespace std;
 
 int main();
 
-int main() {
+int main()
+{
     // Store user's input command
     string command;
-    Graph* powerGrid = new Graph();
+    Graph *powerGrid = new Graph();
 
-    while (cin >> command) {
-        if(command == "LOAD")
+    while (cin >> command)
+    {
+        if (command == "LOAD")
         {
             string fName;
-            int a, b, w;
+            int n, a, b, w;
             cin >> fName;
-            ifstream fin(fName.c_str()); //Note that we are using the variable as the filename
+            ifstream fin(fName.c_str()); // Note that we are using the variable as the filename
+            fin >> n;
 
-            while (fin >> a >> b >> w) {
+            while (fin >> a >> b >> w)
+            {
                 powerGrid->load_graph(a, b, w);
             }
-
-            fin.close();
-
+            std::cout << "success" << std::endl;
         }
-        else if (command == "INSERT") {
+        else if (command == "INSERT")
+        {
             int a, b, w;
             cin >> a >> b >> w;
 
             powerGrid->insert_edge(a, b, w);
-        } else if (command == "PRINT") {
+        }
+        else if (command == "PRINT")
+        {
             int a;
             cin >> a;
 
             powerGrid->print_adj_edges(a);
-        } else if (command == "DELETE") {
+        }
+        else if (command == "DELETE")
+        {
             int a;
             cin >> a;
 
             powerGrid->delete_node(a);
-        } else if (command == "MST") {
+        }
+        else if (command == "MST")
+        {
             powerGrid->find_mst();
-        } else if (command == "COST") {
-            
-        } else if (command == "END") {
+        }
+        else if (command == "COST")
+        {
+            powerGrid->cost_mst();
+        }
+        else if (command == "END")
+        {
             break;
         }
     }
