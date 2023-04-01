@@ -237,7 +237,7 @@ void Graph::find_mst()
         // Next, we take edges adjacent to b and add to Q
         heap_sort(mst_adj_list[b]);
     }
-    
+    delete[] mst_adj_list;
     std::cout << std::endl;
 };
 
