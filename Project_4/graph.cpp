@@ -378,6 +378,12 @@ void Graph::cost_mst()
         }
     }
 
+    if (n == 0 ){
+        std::cout << "cost is 0" << std::endl;
+        delete[] mst_adj_list;
+        return;
+    }
+
     // Find a vertex in the graph
     for (int i = 0; i < 50000; i++)
     {
