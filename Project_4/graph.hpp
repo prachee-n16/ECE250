@@ -10,7 +10,8 @@ class Graph {
         std::vector<std::tuple<int, int, int>> *adj_list;
         // Priority Queue
         std::vector<std::tuple<int, int, int>> Q;
-        
+        // Stores a cached value of the mst
+        int costMST = -1;
     public:
         // Constructor
         Graph();
@@ -27,8 +28,17 @@ class Graph {
         void delete_node(int a);
         //Find minimum spanning tree
         void find_mst();
+        // Find the cost of MST
         void cost_mst();
 
         void heap_sort(std::vector<std::tuple<int, int, int>> p);
         void heapify(std::vector<std::tuple<int, int, int>> &q, int n, int i);
+};
+
+// Illegal exception class
+class illegal_exception : public std::exception {
+    public:
+        const char* what() const noexcept override {
+            return "illegal argument";
+        };
 };
