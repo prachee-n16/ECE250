@@ -198,12 +198,9 @@ void Graph::delete_node(int a)
 void Graph::find_mst()
 {
     Q.clear();
-    // PRIM'S ALGORITHM
-    int r;
 
     // Copy of the adjacent list to use
     std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50001];
-
     // Store's MST
     std::vector<int> mst;
 
@@ -216,75 +213,97 @@ void Graph::find_mst()
             n++;
         }
     }
+
     if (n == 0 ){
         std::cout << "failure" << std::endl;
         delete[] mst_adj_list;
         return;
     }
+
     // Find a vertex in the graph
     for (int i = 0; i < 50000; i++)
     {
         if (!mst_adj_list[i].empty())
         {
-            r = i;
             // get all of it's edges
-            heap_sort(mst_adj_list[r]);
+            heap_sort(mst_adj_list[i]);
             break;
         }
     }
 
-    
-
     // this while loop is a joke rn for testing purposes
-    while (mst.size() != n)
+    while (mst.size() != n || Q.size() == 0)
     {
-        std::cout << "Queue:" << std::endl;
-        for (int i = 0; i < Q.size(); i++) {
-            std::cout << std::get<0>(Q[i]) << " " << std::get<1>(Q[i]) << " " << std::get<2>(Q[i]) << std::endl;
-        }
-        std::cout << "Vertices " << mst.size() << " discovered out of " << n << std::endl;
-
+        
         // Extract minimum from the queue
         std::tuple<int, int, int> u = Q[0];
         Q.erase(Q.begin());
 
-        // Print out this edge being added to MST
-        std::cout << "Edge chosen: " << std::get<0>(u) << " " << std::get<1>(u) << " " << std::get<2>(u) << " " << std::endl;
-
+        
         // If vertex has already been considered
         // Don't consider it
+        // if both nodes are not already considered in MST
         
-            // Check if we had this vertex before
-            if (std::find(mst.begin(), mst.end(), std::get<0>(u)) == mst.end()) {
-                mst.push_back(std::get<0>(u));
-            } 
-            if (std::find(mst.begin(), mst.end(), std::get<1>(u)) == mst.end()) {
-                mst.push_back(std::get<1>(u));
-            } 
+        int a_found = 0;
+        int b_found = 0;
 
-            // Remove edge from list
-            int a = std::get<0>(u);
-            for (int i = 0; i < mst_adj_list[a].size(); i++) {
-                if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
-                    mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
-                    break;
-                }
+        for(int i = 0; i<mst.size(); i++) {
+            if (mst[i] == std::get<0>(u)) {
+                a_found = 1;
             }
+            if (mst[i] == std::get<1>(u)) {
+                b_found = 1;
+            }
+        } 
+        
+        
+        if(a_found == 0) {
+            mst.push_back(std::get<0>(u));
+        }
+        if (b_found == 0) {
+            mst.push_back(std::get<1>(u));
+        }
+        if (a_found == 1) {
+            if (b_found == 1) {
+                continue;
+            }
+        }
 
-            // Remove edge from adjacency list of other node
-            int b = std::get<1>(u);
-            for (int i = 0; i < mst_adj_list[b].size(); i++)
+        // Print out this edge being added to MST
+        std::cout << std::get<0>(u) << " " << std::get<1>(u) << " " << std::get<2>(u) << " ";
+
+
+        // Remove edge from list
+        int a = std::get<0>(u);
+        for (int i = 0; i < mst_adj_list[a].size(); i++) {
+            if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
+                mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
+                break;
+            }
+        }
+
+        // Remove edge from adjacency list of other node
+        int b = std::get<1>(u);
+        for (int i = 0; i < mst_adj_list[b].size(); i++)
+        {
+            if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
             {
-                if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
-                {
-                    mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
-                    break;
+                mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
+                break;
+            }
+        }
+
+        // Check if edge is in priority queue
+        // If so, remove it
+        if (mst.size() != n){
+            for (int i = 0; i < Q.size(); i++) {
+                if (std::get<1>(Q[i]) == a && std::get<0>(Q[i]) == b) {
+                    Q.erase(Q.begin() + i);
                 }
             }
-
-            // Next, we take edges adjacent to b and add to Q
-            heap_sort(mst_adj_list[std::get<1>(u)]);
-        
+        }
+        // Next, we take edges adjacent to b and add to Q
+        heap_sort(mst_adj_list[std::get<1>(u)]);
     }
     delete[] mst_adj_list;
     std::cout << std::endl;
@@ -343,12 +362,9 @@ void Graph::heapify(std::vector<std::tuple<int, int, int>> &q, int n, int i)
 void Graph::cost_mst()
 {
     Q.clear();
-    // PRIM'S ALGORITHM
-    int r;
 
     // Copy of the adjacent list to use
     std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50001];
-
     // Store's MST
     std::vector<int> mst;
 
@@ -361,69 +377,93 @@ void Graph::cost_mst()
             n++;
         }
     }
+
     // Find a vertex in the graph
     for (int i = 0; i < 50000; i++)
     {
         if (!mst_adj_list[i].empty())
         {
-            r = i;
             // get all of it's edges
-            heap_sort(mst_adj_list[r]);
+            heap_sort(mst_adj_list[i]);
             break;
         }
     }
 
-    // this while loop is a joke rn for testing purposes
     int cost = 0;
-    while (mst.size() != n)
+    // this while loop is a joke rn for testing purposes
+    while (mst.size() != n || Q.size() == 0)
     {
+        
         // Extract minimum from the queue
         std::tuple<int, int, int> u = Q[0];
         Q.erase(Q.begin());
 
+        
+        // If vertex has already been considered
+        // Don't consider it
+        // if both nodes are not already considered in MST
+        
+        int a_found = 0;
+        int b_found = 0;
+
+        for(int i = 0; i<mst.size(); i++) {
+            if (mst[i] == std::get<0>(u)) {
+                a_found = 1;
+            }
+            if (mst[i] == std::get<1>(u)) {
+                b_found = 1;
+            }
+        } 
+        
+        
+        if(a_found == 0) {
+            mst.push_back(std::get<0>(u));
+        }
+        if (b_found == 0) {
+            mst.push_back(std::get<1>(u));
+        }
+        if (a_found == 1) {
+            if (b_found == 1) {
+                continue;
+            }
+        }
+
         // Print out this edge being added to MST
         cost += std::get<2>(u);
 
-        // if both nodes are not already considered in MST
-        if (!((std::find(mst.begin(), mst.end(), std::get<0>(u)) != mst.end()) && (std::find(mst.begin(), mst.end(), std::get<1>(u)) != mst.end()))) {
-            // Check if we had this vertex before
-            if (std::find(mst.begin(), mst.end(), std::get<0>(u)) == mst.end()) {
-                mst.push_back(std::get<0>(u));
-            } 
-            if (std::find(mst.begin(), mst.end(), std::get<1>(u)) == mst.end()) {
-                mst.push_back(std::get<1>(u));
+        // Remove edge from list
+        int a = std::get<0>(u);
+        for (int i = 0; i < mst_adj_list[a].size(); i++) {
+            if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
+                mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
+                break;
             }
-
-            // Remove edge from list
-            int a = std::get<0>(u);
-            // Go to a's adjacency list
-            for (int i = 0; i < mst_adj_list[a].size(); i++) {
-                // if b = b
-                if (std::get<1>(mst_adj_list[a][i]) == std::get<1>(u)) {
-                    mst_adj_list[a].erase(mst_adj_list[a].begin() + i);
-                    break;
-                }
-            }
-
-            // Remove edge from adjacency list of other node
-            int b = std::get<1>(u);
-            for (int i = 0; i < mst_adj_list[b].size(); i++)
-            {
-                // if a = a
-                if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
-                {
-                    mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
-                    break;
-                }
-            }
-
-            // Next, we take edges adjacent to b and add to Q
-            heap_sort(mst_adj_list[b]);
         }
-    }
 
+        // Remove edge from adjacency list of other node
+        int b = std::get<1>(u);
+        for (int i = 0; i < mst_adj_list[b].size(); i++)
+        {
+            if (std::get<1>(mst_adj_list[b][i]) == std::get<0>(u))
+            {
+                mst_adj_list[b].erase(mst_adj_list[b].begin() + i);
+                break;
+            }
+        }
+
+        // Check if edge is in priority queue
+        // If so, remove it
+        if (mst.size() != n){
+            for (int i = 0; i < Q.size(); i++) {
+                if (std::get<1>(Q[i]) == a && std::get<0>(Q[i]) == b) {
+                    Q.erase(Q.begin() + i);
+                }
+            }
+        }
+        // Next, we take edges adjacent to b and add to Q
+        heap_sort(mst_adj_list[std::get<1>(u)]);
+    }
     delete[] mst_adj_list;
 
     std::cout << "cost is " << cost << std::endl;
-};
-
+}
