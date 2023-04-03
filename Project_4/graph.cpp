@@ -221,7 +221,9 @@ void Graph::find_mst()
     // Copy of the adjacent list to use
     std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50001];
     // Store's MST
-    std::vector<int> mst;
+    // Store's MST
+    int mst[50001]{0};
+    int mst_size = 0;
 
     int n = 0;
     for (int i = 0; i < 50000; i++)
@@ -252,7 +254,7 @@ void Graph::find_mst()
 
     int cost = 0;
     // this while loop is a joke rn for testing purposes
-    while (mst.size() != n || Q.size() == 0)
+    while (mst_size != n || Q.size() == 0)
     {
         
         // Extract minimum from the queue
@@ -266,22 +268,21 @@ void Graph::find_mst()
         
         int a_found = 0;
         int b_found = 0;
-
-        for(int i = 0; i<mst.size(); i++) {
-            if (mst[i] == std::get<0>(u)) {
-                a_found = 1;
-            }
-            if (mst[i] == std::get<1>(u)) {
-                b_found = 1;
-            }
+        
+        if (mst[std::get<0>(u)] == 1) {
+            a_found = 1;
         } 
-        
-        
+        if (mst[std::get<1>(u)] == 1) {
+            b_found = 1;
+        } 
+
         if(a_found == 0) {
-            mst.push_back(std::get<0>(u));
+            mst[std::get<0>(u)] = 1;
+            mst_size++;
         }
         if (b_found == 0) {
-            mst.push_back(std::get<1>(u));
+            mst[std::get<1>(u)] = 1;
+            mst_size++;
         }
         if (a_found == 1) {
             if (b_found == 1) {
@@ -316,7 +317,7 @@ void Graph::find_mst()
 
         // Check if edge is in priority queue
         // If so, remove it
-        if (mst.size() != n){
+        if (mst_size != n){
             for (int i = 0; i < Q.size(); i++) {
                 if (std::get<1>(Q[i]) == a && std::get<0>(Q[i]) == b) {
                     Q.erase(Q.begin() + i);
@@ -327,7 +328,6 @@ void Graph::find_mst()
         heap_sort(mst_adj_list[std::get<1>(u)]);
     }
     delete[] mst_adj_list;
-
     costMST = cost;
     std::cout << std::endl;
 };
@@ -359,24 +359,24 @@ void Graph::heap_sort(std::vector<std::tuple<int, int, int>> p)
 
 void Graph::heapify(std::vector<std::tuple<int, int, int>> &q, int n, int i)
 {
-    int largest = i;
-    int l = 2 * largest + 1;
-    int r = 2 * largest + 2;
+    int minimum = i;
+    int l = 2 * minimum + 1;
+    int r = 2 * minimum + 2;
 
-    if (l < n && std::get<2>(q[l]) > std::get<2>(q[largest]))
+    if (l < n && std::get<2>(q[l]) > std::get<2>(q[minimum]))
     {
-        largest = l;
+        minimum = l;
     }
 
-    if (r < n && std::get<2>(q[r]) > std::get<2>(q[largest]))
+    if (r < n && std::get<2>(q[r]) > std::get<2>(q[minimum]))
     {
-        largest = r;
+        minimum = r;
     }
 
-    if (largest != i)
+    if (minimum != i)
     {
-        swap(q[i], q[largest]);
-        heapify(q, n, largest);
+        swap(q[i], q[minimum]);
+        heapify(q, n, minimum);
     }
 };
 
@@ -389,7 +389,8 @@ void Graph::cost_mst()
     // Copy of the adjacent list to use
     std::vector<std::tuple<int, int, int>>* mst_adj_list = new std::vector<std::tuple<int, int, int>>[50001];
     // Store's MST
-    std::vector<int> mst;
+    int mst[50001]{0};
+    int mst_size = 0;
 
     int n = 0;
     for (int i = 0; i < 50000; i++)
@@ -407,7 +408,7 @@ void Graph::cost_mst()
         return;
     }
 
-    if (costMST != -1) {
+    if (costMST > 0) {
         std::cout << "cost is " << costMST << std::endl;
         delete[] mst_adj_list;
         return;
@@ -426,7 +427,7 @@ void Graph::cost_mst()
 
     int cost = 0;
     // this while loop is a joke rn for testing purposes
-    while (mst.size() != n || Q.size() == 0)
+    while (mst_size != n || Q.size() == 0)
     {
         // Extract minimum from the queue
         std::tuple<int, int, int> u = Q[0];
@@ -439,21 +440,20 @@ void Graph::cost_mst()
         int a_found = 0;
         int b_found = 0;
 
-        for(int i = 0; i<mst.size(); i++) {
-            if (mst[i] == std::get<0>(u)) {
-                a_found = 1;
-            }
-            if (mst[i] == std::get<1>(u)) {
-                b_found = 1;
-            }
+        if (mst[std::get<0>(u)] == 1) {
+            a_found = 1;
         } 
-        
-        
+        if (mst[std::get<1>(u)] == 1) {
+            b_found = 1;
+        } 
+
         if(a_found == 0) {
-            mst.push_back(std::get<0>(u));
+            mst[std::get<0>(u)] = 1;
+            mst_size++;
         }
         if (b_found == 0) {
-            mst.push_back(std::get<1>(u));
+            mst[std::get<1>(u)] = 1;
+            mst_size++;
         }
         if (a_found == 1) {
             if (b_found == 1) {
@@ -486,7 +486,7 @@ void Graph::cost_mst()
 
         // Check if edge is in priority queue
         // If so, remove it
-        if (mst.size() != n){
+        if (mst_size != n){
             for (int i = 0; i < Q.size(); i++) {
                 if (std::get<1>(Q[i]) == a && std::get<0>(Q[i]) == b) {
                     Q.erase(Q.begin() + i);
